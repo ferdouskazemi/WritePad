@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "Write Pad",
+    "edition": "1930s Edition",
+    "ready": "Ready to write!",
+    "noNotes": "No notes open. Click + above to write on fresh paper.",
+    "newNote": "Untitled Note",
+    "savedLocally": "Saved locally",
+    "saving": "Saving...",
+    "synced": "Synced with Google",
+    "offline": "Offline mode",
+    "filmOn": "Film rolling!",
+    "filmOff": "Film paused.",
+    "filmSwitch": "Film switch",
+    "rateNote": "Rate Note"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "writing": "Writing",
+    "language": "Language",
+    "account": "Account",
+    "theme": "Paper Theme",
+    "film": "1930s Film Effects",
+    "focusMode": "Focus Mode",
+    "fontSize": "Font Size",
+    "lineHeight": "Line Height",
+    "persianDigits": "Persian Digits (۱۲۳)",
+    "wordCount": "Show Word Count",
+    "spellcheck": "Spellcheck",
+    "save": "Saved!"
+  },
+  "themes": {
+    "cream": "Cream Paper",
+    "plain": "Plain (No Paper)",
+    "newsprint": "Newsprint",
+    "kraft": "Kraft Card",
+    "sepia": "Sepia Reel",
+    "night": "Night Reel"
+  },
+  "locales": {
+    "en": "English",
+    "fa": "دری (Dari)",
+    "ps": "پښتو (Pashto)"
+  },
+  "tabs": {
+    "new": "New Tab",
+    "close": "Close Tab",
+    "pin": "Pin Tab",
+    "unpin": "Unpin Tab",
+    "rename": "Rename",
+    "duplicate": "Duplicate",
+    "closeOthers": "Close Other Tabs"
+  },
+  "trash": {
+    "title": "Trash (Retained 30 Days)",
+    "empty": "Trash is empty.",
+    "restore": "Restore",
+    "emptyPermanently": "Empty Trash Permanently",
+    "close": "Close"
+  }
+}

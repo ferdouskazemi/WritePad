@@ -7,6 +7,8 @@ import { TabsProvider, useTabs } from "@/components/tabs/TabsContext";
 import { TabStrip } from "@/components/tabs/TabStrip";
 import { EditorView } from "@/components/editor/EditorView";
 import { SyncBar } from "@/components/sync/SyncBar";
+import { SettingsModal } from "@/components/settings/SettingsModal";
+import { I18nProvider, useI18n } from "@/lib/i18n/I18nContext";
 import { HoseToggle, HoseRating } from "@/components/hose";
 
 function PadContent({
@@ -25,14 +27,16 @@ function PadContent({
   setSpeech: (s: string) => void;
 }) {
   const { activeId, activeNote, updateActiveRating } = useTabs();
+  const { t } = useI18n();
   const [isTyping, setIsTyping] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   return (
     <main
       onMouseMove={() => setIsTyping(false)}
       className="min-h-screen flex flex-col max-w-5xl mx-auto py-2 sm:py-4 px-2 sm:px-6 transition-all duration-300"
     >
-      {/* Top Bar: Fades away during active typing for immersive paper feel */}
+      {/* Top Bar: Fades during active typing for immersive paper feel */}
       <header
         className={`mb-2 flex flex-wrap items-center justify-between gap-2 px-2 transition-opacity duration-300 ${
           isTyping ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -40,27 +44,37 @@ function PadContent({
       >
         <div className="flex items-center gap-2">
           <h1 className="text-xl sm:text-2xl font-black font-serif text-[var(--theme-ink)]">
-            Write Pad
+            {t("app.title")}
           </h1>
           <span className="text-[11px] px-2 py-0.5 rounded-full border border-[var(--theme-border)] bg-[var(--theme-patch)] font-bold text-[var(--theme-ink-muted)]">
-            1930s Living Pad
+            {t("app.edition")}
           </span>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Theme Selector (including Plain / No-paper theme) */}
+          {/* Quick theme selector */}
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
             className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)] font-bold cursor-pointer outline-none shadow-sm"
           >
-            <option value="cream">📜 Cream Paper</option>
-            <option value="plain">⚪ Plain (بدون پس‌زمینه)</option>
-            <option value="newsprint">📰 Newsprint</option>
-            <option value="kraft">📦 Kraft Card</option>
-            <option value="sepia">🎞 Sepia Reel</option>
-            <option value="night">🌙 Night Reel</option>
+            <option value="cream">📜 {t("themes.cream")}</option>
+            <option value="plain">⚪ {t("themes.plain")}</option>
+            <option value="newsprint">📰 {t("themes.newsprint")}</option>
+            <option value="kraft">📦 {t("themes.kraft")}</option>
+            <option value="sepia">🎞 {t("themes.sepia")}</option>
+            <option value="night">🌙 {t("themes.night")}</option>
           </select>
+
+          {/* Settings button */}
+          <button
+            type="button"
+            title={t("settings.title")}
+            onClick={() => setIsSettingsOpen(true)}
+            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
+          >
+            ⚙️ {t("settings.title")}
+          </button>
 
           <Link
             href="/lab"
@@ -71,7 +85,7 @@ function PadContent({
         </div>
       </header>
 
-      {/* Sync and Account Bar: Softly visible */}
+      {/* Sync and Account Bar */}
       <div
         className={`transition-opacity duration-300 ${
           isTyping ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -103,7 +117,7 @@ function PadContent({
             />
           ) : (
             <div className="flex-1 flex items-center justify-center p-12 text-center bg-[var(--theme-paper)]">
-              <p className="opacity-60 text-sm">No notes open. Click + above to write on fresh paper.</p>
+              <p className="opacity-60 text-sm">{t("app.noNotes")}</p>
             </div>
           )}
         </div>
@@ -116,7 +130,7 @@ function PadContent({
         }`}
       >
         <div className="flex items-center gap-3">
-          <span>Film Effect:</span>
+          <span>{t("settings.film")}:</span>
           <div className="inline-block scale-75 origin-left">
             <HoseToggle
               label="Film switch"
@@ -124,7 +138,7 @@ function PadContent({
               disabled={theme === "plain"}
               onChange={(c) => {
                 setFilmEnabled(c);
-                setSpeech(c ? "Film rolling!" : "Film paused.");
+                setSpeech(c ? t("app.filmOn") : t("app.filmOff"));
               }}
               onHoseLine={setSpeech}
             />
@@ -133,7 +147,7 @@ function PadContent({
 
         {activeNote && (
           <div className="flex items-center gap-2">
-            <span>Rate Note:</span>
+            <span>{t("app.rateNote")}:</span>
             <div className="inline-block scale-75 origin-right">
               <HoseRating
                 label="Note rating"
@@ -148,6 +162,16 @@ function PadContent({
           </div>
         )}
       </footer>
+
+      {/* Settings Modal (using Rubber Hose tabs, sliders, radios, checkboxes, toggles) */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        currentTheme={theme}
+        onThemeChange={setTheme}
+        filmEnabled={filmEnabled}
+        onFilmToggle={setFilmEnabled}
+      />
     </main>
   );
 }
@@ -163,16 +187,18 @@ export default function Home() {
 
   return (
     <FilmFrame enabled={filmEnabled && theme !== "plain"}>
-      <TabsProvider>
-        <PadContent
-          theme={theme}
-          setTheme={setTheme}
-          filmEnabled={filmEnabled}
-          setFilmEnabled={setFilmEnabled}
-          speech={speech}
-          setSpeech={setSpeech}
-        />
-      </TabsProvider>
+      <I18nProvider>
+        <TabsProvider>
+          <PadContent
+            theme={theme}
+            setTheme={setTheme}
+            filmEnabled={filmEnabled}
+            setFilmEnabled={setFilmEnabled}
+            speech={speech}
+            setSpeech={setSpeech}
+          />
+        </TabsProvider>
+      </I18nProvider>
     </FilmFrame>
   );
 }

@@ -1,5 +1,18 @@
 # Changelog
 
+## [Phase 5] — 2026-11-22
+
+### Added
+- Multilingual interface supporting English (`en`), Dari (`fa`), and Pashto (`ps`) with zero missing keys test validation
+- Full RTL layout mirroring for Dari and Pashto with separate UI and document direction handling
+- Solar Hijri (هجری شمسی) calendar date formatting for Dari and Pashto
+- Settings panel modal powered by Rubber Hose UI:
+  - `<hose-tabs>` 4-section navigation (Appearance, Writing, Language, Account)
+  - `<hose-slider>` for font size and line height adjustment
+  - `<hose-checkbox>` for word count, spellcheck, and Persian digits
+  - `<hose-toggle>` for film effects
+  - `<hose-radio>` for paper themes and interface language selection
+
 ## [Phase 4] — 2026-11-22
 
 ### Added
