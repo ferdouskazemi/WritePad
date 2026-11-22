@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FilmFrame } from "@/components/paper/FilmFrame";
 import { TabsProvider, useTabs } from "@/components/tabs/TabsContext";
 import { TabStrip } from "@/components/tabs/TabStrip";
 import { EditorView } from "@/components/editor/EditorView";
@@ -10,6 +9,7 @@ import { ExportModal } from "@/components/export/ExportModal";
 import { SearchModal } from "@/components/search/SearchModal";
 import { ShortcutsModal } from "@/components/shortcuts/ShortcutsModal";
 import { I18nProvider, useI18n } from "@/lib/i18n/I18nContext";
+import "@/components/paper/film.css";
 
 function PadContent({
   theme,
@@ -76,16 +76,16 @@ function PadContent({
   return (
     <main
       onMouseMove={() => setIsTyping(false)}
-      className={`min-h-screen flex flex-col w-full bg-transparent transition-all duration-300 relative ${
+      className={`flex-1 flex flex-col w-full bg-transparent transition-all duration-300 relative z-10 ${
         focusMode ? "focus-mode-active" : ""
       }`}
     >
-      {/* 1. Cartoon Folder Tab Strip directly at the top of the window */}
+      {/* 1. Cartoon Folder Tab Strip directly at the top of the paper */}
       <div className="w-full relative z-20">
         <TabStrip />
       </div>
 
-      {/* 2. Full-bleed Living Paper Sheet Area (writing directly on the main background) */}
+      {/* 2. Full-bleed Paper Sheet Area (writing directly on the paper canvas, free of any lines or shapes) */}
       <div className="flex-1 flex flex-col w-full bg-transparent">
         {activeId && activeNote ? (
           <EditorView
@@ -102,9 +102,9 @@ function PadContent({
         )}
       </div>
 
-      {/* 3. Subtle floating tools pill in bottom corner (fades during typing, 0 clutter on the paper) */}
+      {/* 3. Subtle floating tools in bottom corner (fades during typing, 0 clutter on the paper) */}
       <div
-        className={`fixed bottom-3 right-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-[var(--theme-patch)] border border-[var(--theme-border)] shadow-md select-none transition-opacity duration-300 ${
+        className={`fixed bottom-10 right-10 z-40 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-patch)] border border-[var(--theme-border)] shadow-md select-none transition-opacity duration-300 ${
           isTyping ? "opacity-0 pointer-events-none" : "opacity-35 hover:opacity-100"
         }`}
       >
@@ -185,19 +185,52 @@ export default function Home() {
   }, [theme]);
 
   return (
-    <FilmFrame enabled={filmEnabled && theme !== "plain"}>
-      <I18nProvider>
-        <TabsProvider>
-          <PadContent
-            theme={theme}
-            setTheme={setTheme}
-            filmEnabled={filmEnabled}
-            setFilmEnabled={setFilmEnabled}
-            speech={speech}
-            setSpeech={setSpeech}
-          />
-        </TabsProvider>
-      </I18nProvider>
-    </FilmFrame>
+    <div className="burnt-paper-viewport">
+      {/* SVG Filter for Organic Jagged Burnt Edges */}
+      <svg
+        width="0"
+        height="0"
+        className="absolute w-0 h-0 overflow-hidden pointer-events-none"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id="burnt-edge-displacement" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.04"
+              numOctaves="4"
+              seed="7"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="8"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* Burnt Paper Sheet floating inside 30px dark frame */}
+      <div className="burnt-paper-sheet">
+        {/* Organic Burnt Edge Scorched Rim Overlay */}
+        <div className="burnt-edge-overlay" aria-hidden="true" />
+
+        <I18nProvider>
+          <TabsProvider>
+            <PadContent
+              theme={theme}
+              setTheme={setTheme}
+              filmEnabled={filmEnabled}
+              setFilmEnabled={setFilmEnabled}
+              speech={speech}
+              setSpeech={setSpeech}
+            />
+          </TabsProvider>
+        </I18nProvider>
+      </div>
+    </div>
   );
 }

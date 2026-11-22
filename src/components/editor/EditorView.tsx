@@ -117,16 +117,16 @@ export function EditorView({
   return (
     <div
       onMouseMove={() => setIsTyping(false)}
-      className="flex flex-col flex-1 w-full bg-transparent text-[var(--theme-ink)] relative transition-opacity duration-300"
+      className={`flex flex-col flex-1 w-full bg-transparent text-[var(--theme-ink)] relative transition-opacity duration-300 ${
+        isTyping ? "typing-active" : ""
+      }`}
     >
       {/* Floating Mini Selection Formatting Menu (opens under selected text) */}
       <FloatingSelectionMenu editor={tiptapInstance} />
 
-      {/* Floating View & Tools bar (fades away while typing for pure paper feel) */}
+      {/* Floating View & Tools bar (hidden to keep canvas 100% distraction-free) */}
       <div
-        className={`absolute top-2 right-6 sm:right-12 z-20 flex items-center gap-2 transition-opacity duration-300 ${
-          isTyping ? "opacity-0 pointer-events-none" : "opacity-80 hover:opacity-100"
-        }`}
+        className="hidden"
       >
         {/* Direction Switcher */}
         <div className="flex items-center gap-1 bg-[var(--theme-patch)] p-1 rounded-md border border-[var(--theme-border)] shadow-sm text-xs">
@@ -185,20 +185,19 @@ export function EditorView({
         </div>
       </div>
 
-      {/* Pure Paper Sheet: Title written directly onto paper */}
-      <div className="w-full max-w-7xl mx-auto pt-8 px-6 sm:px-12 md:px-16">
+      {/* Pure Paper Sheet: Title written directly onto paper without any lines or shapes */}
+      <div className="w-full max-w-7xl mx-auto pt-8 px-8 sm:px-16 md:px-24">
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
           placeholder="Title..."
-          className="text-4xl sm:text-5xl font-black bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-25 text-[var(--theme-ink)] font-serif tracking-tight"
+          className="text-4xl sm:text-5xl font-black bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-20 text-[var(--theme-ink)] font-serif tracking-tight"
         />
-        <div className="h-[2px] bg-[var(--theme-border)] opacity-15 mt-3 mb-6" />
       </div>
 
-      {/* Writing Area: Fill paper */}
-      <div className="flex-1 w-full max-w-7xl mx-auto px-6 sm:px-12 md:px-16 overflow-y-auto">
+      {/* Writing Area: Clean paper without any distracting lines or doodles */}
+      <div className="flex-1 w-full max-w-7xl mx-auto px-8 sm:px-16 md:px-24 overflow-y-auto pt-4">
         {editorMode === "rich" && (
           <RichEditor
             content={content}
@@ -226,11 +225,9 @@ export function EditorView({
         )}
       </div>
 
-      {/* Subtle bottom status indicator: Fades while typing */}
+      {/* Word count & status bar: fixed at bottom and hidden for now as requested */}
       <footer
-        className={`w-full max-w-7xl mx-auto px-6 sm:px-12 md:px-16 py-2 text-[11px] text-[var(--theme-ink-muted)] flex items-center justify-between border-t border-[var(--theme-border)] border-opacity-10 select-none transition-opacity duration-300 ${
-          isTyping ? "opacity-0" : "opacity-60 hover:opacity-100"
-        }`}
+        className="fixed bottom-0 left-0 right-0 hidden z-30 py-2 px-8 text-[11px] text-[var(--theme-ink-muted)] bg-[var(--theme-patch)] border-t border-[var(--theme-border)] select-none"
       >
         <div className="flex items-center gap-3">
           <span>{stats.words} words</span>
