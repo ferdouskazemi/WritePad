@@ -27,7 +27,7 @@ export function RichEditor({
     content,
     editorProps: {
       attributes: {
-        class: `prose max-w-none focus:outline-none min-h-[300px] p-6 font-serif text-[var(--theme-ink)] ${
+        class: `prose max-w-none focus:outline-none min-h-[500px] py-4 font-serif text-[var(--theme-ink)] text-xl leading-relaxed ${
           directionOverride === "rtl"
             ? "dir-rtl"
             : directionOverride === "ltr"
@@ -90,7 +90,7 @@ export function RichEditor({
   }, [content, editor]);
 
   return (
-    <div className="rich-editor-wrapper w-full h-full bg-[var(--theme-paper)] overflow-y-auto">
+    <div className="rich-editor-wrapper w-full h-full bg-transparent overflow-y-auto">
       <EditorContent editor={editor} />
     </div>
   );

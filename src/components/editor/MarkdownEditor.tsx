@@ -33,8 +33,8 @@ export function MarkdownEditor({
       "&": {
         height: "100%",
         fontFamily: "var(--font-mono)",
-        fontSize: "14px",
-        backgroundColor: "var(--theme-paper)",
+        fontSize: "15px",
+        backgroundColor: "transparent",
         color: "var(--theme-ink)",
       },
       ".cm-content": {

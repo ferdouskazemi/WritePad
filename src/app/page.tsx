@@ -1,18 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { FilmFrame } from "@/components/paper/FilmFrame";
 import { TabsProvider, useTabs } from "@/components/tabs/TabsContext";
 import { TabStrip } from "@/components/tabs/TabStrip";
 import { EditorView } from "@/components/editor/EditorView";
-import { SyncBar } from "@/components/sync/SyncBar";
 import { SettingsModal } from "@/components/settings/SettingsModal";
 import { ExportModal } from "@/components/export/ExportModal";
 import { SearchModal } from "@/components/search/SearchModal";
 import { ShortcutsModal } from "@/components/shortcuts/ShortcutsModal";
 import { I18nProvider, useI18n } from "@/lib/i18n/I18nContext";
-import { HoseToggle, HoseRating, HoseTooltip } from "@/components/hose";
 
 function PadContent({
   theme,
@@ -29,7 +26,7 @@ function PadContent({
   speech: string;
   setSpeech: (s: string) => void;
 }) {
-  const { activeId, activeNote, updateActiveRating } = useTabs();
+  const { activeId, activeNote } = useTabs();
   const { t } = useI18n();
   const [isTyping, setIsTyping] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
@@ -79,187 +76,71 @@ function PadContent({
   return (
     <main
       onMouseMove={() => setIsTyping(false)}
-      className="min-h-screen flex flex-col max-w-5xl mx-auto py-2 sm:py-4 px-2 sm:px-6 transition-all duration-300"
+      className={`min-h-screen flex flex-col w-full bg-transparent transition-all duration-300 relative ${
+        focusMode ? "focus-mode-active" : ""
+      }`}
     >
-      {/* Top Bar: Fades during active typing for immersive paper feel */}
-      <header
-        className={`mb-2 flex flex-wrap items-center justify-between gap-2 px-2 transition-opacity duration-300 ${
-          isTyping ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl sm:text-2xl font-black font-serif text-[var(--theme-ink)]">
-            {t("app.title")}
-          </h1>
-          <span className="text-[11px] px-2 py-0.5 rounded-full border border-[var(--theme-border)] bg-[var(--theme-patch)] font-bold text-[var(--theme-ink-muted)]">
-            {t("app.edition")}
-          </span>
-          {/* Bird Tooltip for Onboarding */}
-          <div className="hidden sm:inline-block scale-75 origin-left">
-            <HoseTooltip
-              text="Press Ctrl+K to search, Ctrl+. for focus mode!"
-              label="Tips"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Search Button */}
-          <button
-            type="button"
-            title="Search Notes (Ctrl+K)"
-            onClick={() => setIsSearchOpen(true)}
-            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
-          >
-            🔍 <span className="hidden sm:inline">Search</span>
-          </button>
-
-          {/* Quick theme selector */}
-          <select
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            className="text-xs px-2 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)] font-bold cursor-pointer outline-none shadow-sm"
-          >
-            <option value="cream">📜 {t("themes.cream")}</option>
-            <option value="plain">⚪ {t("themes.plain")}</option>
-            <option value="newsprint">📰 {t("themes.newsprint")}</option>
-            <option value="kraft">📦 {t("themes.kraft")}</option>
-            <option value="sepia">🎞 {t("themes.sepia")}</option>
-            <option value="night">🌙 {t("themes.night")}</option>
-          </select>
-
-          {/* Focus Mode button */}
-          <button
-            type="button"
-            title="Focus Mode (Ctrl+.)"
-            onClick={() => setFocusMode(!focusMode)}
-            className={`text-xs px-2 py-1 rounded-md border-2 font-bold shadow-sm transition-all ${
-              focusMode
-                ? "border-[var(--theme-ink)] bg-[var(--theme-ink)] text-[var(--theme-paper)]"
-                : "border-[var(--theme-border)] bg-[var(--theme-cream)] hover:bg-[var(--theme-paper)]"
-            }`}
-          >
-            {focusMode ? "Focus On" : "Focus"}
-          </button>
-
-          {/* Export Button */}
-          <button
-            type="button"
-            title="Export or Screenshot (Ctrl+Shift+S)"
-            onClick={() => setIsExportOpen(true)}
-            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
-          >
-            📷 Export
-          </button>
-
-          {/* Settings button */}
-          <button
-            type="button"
-            title={t("settings.title")}
-            onClick={() => setIsSettingsOpen(true)}
-            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
-          >
-            ⚙️
-          </button>
-
-          <Link
-            href="/lab"
-            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-patch)] text-[var(--theme-patch-ink)] font-bold hover:opacity-90 shadow-sm"
-          >
-            Lab ↗
-          </Link>
-        </div>
-      </header>
-
-      {/* Sync and Account Bar */}
-      <div
-        className={`transition-opacity duration-300 ${
-          isTyping ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        <SyncBar />
+      {/* 1. Cartoon Folder Tab Strip directly at the top of the window */}
+      <div className="w-full relative z-20">
+        <TabStrip />
       </div>
 
-      {/* Living Paper Canvas */}
-      <div
-        className={`flex-1 flex flex-col min-h-[620px] bg-[var(--theme-paper)] border-2 border-[var(--theme-border)] rounded-xl shadow-[0_6px_0_var(--theme-shadow)] overflow-hidden ${
-          focusMode ? "focus-mode-active" : ""
-        }`}
-      >
-        {/* Cartoon Folder Tab Strip */}
-        <div
-          className={`transition-opacity duration-300 ${
-            isTyping ? "opacity-20 hover:opacity-100" : "opacity-100"
-          }`}
-        >
-          <TabStrip />
-        </div>
-
-        {/* Paper Sheet Area */}
-        <div className="flex-1 flex flex-col bg-[var(--theme-paper)]">
-          {activeId && activeNote ? (
-            <EditorView
-              key={activeId}
-              noteId={activeId}
-              initialTitle={activeNote.title}
-              initialContent={activeNote.content}
-              speechLine={speech}
-            />
-          ) : (
-            <div className="flex-1 flex items-center justify-center p-12 text-center bg-[var(--theme-paper)]">
-              <p className="opacity-60 text-sm">{t("app.noNotes")}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Footer controls: Fades during typing */}
-      <footer
-        className={`mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-[var(--theme-ink-muted)] px-2 transition-opacity duration-300 ${
-          isTyping ? "opacity-0" : "opacity-90"
-        }`}
-      >
-        <div className="flex items-center gap-3">
-          <span>{t("settings.film")}:</span>
-          <div className="inline-block scale-75 origin-left">
-            <HoseToggle
-              label="Film switch"
-              checked={filmEnabled && theme !== "plain"}
-              disabled={theme === "plain"}
-              onChange={(c) => {
-                setFilmEnabled(c);
-                setSpeech(c ? t("app.filmOn") : t("app.filmOff"));
-              }}
-              onHoseLine={setSpeech}
-            />
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsShortcutsOpen(true)}
-            className="text-[11px] underline opacity-70 hover:opacity-100 ml-2"
-          >
-            Shortcuts (Ctrl+/)
-          </button>
-        </div>
-
-        {activeNote && (
-          <div className="flex items-center gap-2">
-            <span>{t("app.rateNote")}:</span>
-            <div className="inline-block scale-75 origin-right">
-              <HoseRating
-                label="Note rating"
-                value={activeNote.rating}
-                onChange={(v) => {
-                  updateActiveRating(v);
-                  setSpeech(`Rated note ${v} stars!`);
-                }}
-                onHoseLine={setSpeech}
-              />
-            </div>
+      {/* 2. Full-bleed Living Paper Sheet Area (writing directly on the main background) */}
+      <div className="flex-1 flex flex-col w-full bg-transparent">
+        {activeId && activeNote ? (
+          <EditorView
+            key={activeId}
+            noteId={activeId}
+            initialTitle={activeNote.title}
+            initialContent={activeNote.content}
+            speechLine={speech}
+          />
+        ) : (
+          <div className="flex-1 flex items-center justify-center p-12 text-center bg-transparent">
+            <p className="opacity-60 text-sm">{t("app.noNotes")}</p>
           </div>
         )}
-      </footer>
+      </div>
+
+      {/* 3. Subtle floating tools pill in bottom corner (fades during typing, 0 clutter on the paper) */}
+      <div
+        className={`fixed bottom-3 right-4 z-40 flex items-center gap-1.5 px-2 py-1 rounded-full bg-[var(--theme-patch)] border border-[var(--theme-border)] shadow-md select-none transition-opacity duration-300 ${
+          isTyping ? "opacity-0 pointer-events-none" : "opacity-35 hover:opacity-100"
+        }`}
+      >
+        <button
+          type="button"
+          title="Search Notes (Ctrl+K)"
+          onClick={() => setIsSearchOpen(true)}
+          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+        >
+          🔍
+        </button>
+        <button
+          type="button"
+          title="Export / Screenshot (Ctrl+Shift+S)"
+          onClick={() => setIsExportOpen(true)}
+          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+        >
+          📷
+        </button>
+        <button
+          type="button"
+          title={t("settings.title")}
+          onClick={() => setIsSettingsOpen(true)}
+          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+        >
+          ⚙️
+        </button>
+        <button
+          type="button"
+          title="Shortcuts (Ctrl+/)"
+          onClick={() => setIsShortcutsOpen(true)}
+          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+        >
+          ?
+        </button>
+      </div>
 
       {/* Settings Modal */}
       <SettingsModal

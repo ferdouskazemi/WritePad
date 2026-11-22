@@ -28,7 +28,7 @@ export function SplitEditor({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x-2 divide-[var(--theme-border)] h-full w-full bg-[var(--theme-paper)]">
+    <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x-2 divide-[var(--theme-border)] h-full w-full bg-transparent">
       {/* Markdown Source Pane */}
       <div className="h-full overflow-hidden flex flex-col">
         <div className="px-3 py-1 bg-[var(--theme-cream)] text-[var(--theme-ink)] text-xs font-bold border-b border-[var(--theme-ink-faint)] flex items-center justify-between">

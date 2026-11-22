@@ -5,8 +5,9 @@
   align-items: flex-end;
   position: relative;
   border-bottom: 2px solid var(--theme-border);
-  background-color: var(--theme-cream);
+  background-color: transparent;
   user-select: none;
+  width: 100%;
 }
 
 .tab-strip-scroll {
@@ -49,7 +50,7 @@
 
 /* Inactive Tab */
 .folder-tab.tab-inactive {
-  background-color: var(--theme-cream);
+  background-color: rgba(0, 0, 0, 0.04);
   color: var(--theme-ink-muted);
   border-bottom: 2px solid var(--theme-border);
   margin-bottom: 0;
@@ -58,7 +59,7 @@
 
 .folder-tab.tab-inactive:hover {
   opacity: 1;
-  background-color: var(--theme-paper);
+  background-color: rgba(0, 0, 0, 0.07);
 }
 
 /* Active Tab: stands up out of the rail */
