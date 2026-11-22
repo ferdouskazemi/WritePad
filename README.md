@@ -11,7 +11,7 @@ A web notepad that feels like writing on a living sheet of 1930s cartoon paper.
 - [x] Phase 4: Google sign-in & sync
 - [x] Phase 5: Languages, themes & settings
 - [x] Phase 6: Screenshot & export
-- [ ] Phase 7: Immersive polish & launch
+- [x] Phase 7: Immersive polish & launch
 
 ## Quick start
 

@@ -9,8 +9,10 @@ import { EditorView } from "@/components/editor/EditorView";
 import { SyncBar } from "@/components/sync/SyncBar";
 import { SettingsModal } from "@/components/settings/SettingsModal";
 import { ExportModal } from "@/components/export/ExportModal";
+import { SearchModal } from "@/components/search/SearchModal";
+import { ShortcutsModal } from "@/components/shortcuts/ShortcutsModal";
 import { I18nProvider, useI18n } from "@/lib/i18n/I18nContext";
-import { HoseToggle, HoseRating } from "@/components/hose";
+import { HoseToggle, HoseRating, HoseTooltip } from "@/components/hose";
 
 function PadContent({
   theme,
@@ -30,20 +32,49 @@ function PadContent({
   const { activeId, activeNote, updateActiveRating } = useTabs();
   const { t } = useI18n();
   const [isTyping, setIsTyping] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
-  // Global shortcut: Ctrl+Shift+S for Screenshot/Export
+  // Global shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "s") {
+      // Ctrl+K: Search
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+      // Ctrl+Shift+S: Screenshot / Export
+      else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "s") {
         e.preventDefault();
         setIsExportOpen(true);
       }
+      // Ctrl+. : Toggle Focus Mode
+      else if ((e.ctrlKey || e.metaKey) && e.key === ".") {
+        e.preventDefault();
+        setFocusMode((v) => !v);
+        setSpeech(!focusMode ? "Focus mode enabled." : "Focus mode disabled.");
+      }
+      // Ctrl+/ : Shortcuts
+      else if ((e.ctrlKey || e.metaKey) && e.key === "/") {
+        e.preventDefault();
+        setIsShortcutsOpen(true);
+      }
+      // Esc: Reset typing fade & close dialogs
+      else if (e.key === "Escape") {
+        setIsTyping(false);
+        setIsSearchOpen(false);
+        setIsShortcutsOpen(false);
+        setIsExportOpen(false);
+        setIsSettingsOpen(false);
+      }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [focusMode, setSpeech]);
 
   return (
     <main
@@ -63,9 +94,26 @@ function PadContent({
           <span className="text-[11px] px-2 py-0.5 rounded-full border border-[var(--theme-border)] bg-[var(--theme-patch)] font-bold text-[var(--theme-ink-muted)]">
             {t("app.edition")}
           </span>
+          {/* Bird Tooltip for Onboarding */}
+          <div className="hidden sm:inline-block scale-75 origin-left">
+            <HoseTooltip
+              text="Press Ctrl+K to search, Ctrl+. for focus mode!"
+              label="Tips"
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Search Button */}
+          <button
+            type="button"
+            title="Search Notes (Ctrl+K)"
+            onClick={() => setIsSearchOpen(true)}
+            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
+          >
+            🔍 <span className="hidden sm:inline">Search</span>
+          </button>
+
           {/* Quick theme selector */}
           <select
             value={theme}
@@ -80,7 +128,21 @@ function PadContent({
             <option value="night">🌙 {t("themes.night")}</option>
           </select>
 
-          {/* Screenshot / Export Button */}
+          {/* Focus Mode button */}
+          <button
+            type="button"
+            title="Focus Mode (Ctrl+.)"
+            onClick={() => setFocusMode(!focusMode)}
+            className={`text-xs px-2 py-1 rounded-md border-2 font-bold shadow-sm transition-all ${
+              focusMode
+                ? "border-[var(--theme-ink)] bg-[var(--theme-ink)] text-[var(--theme-paper)]"
+                : "border-[var(--theme-border)] bg-[var(--theme-cream)] hover:bg-[var(--theme-paper)]"
+            }`}
+          >
+            {focusMode ? "Focus On" : "Focus"}
+          </button>
+
+          {/* Export Button */}
           <button
             type="button"
             title="Export or Screenshot (Ctrl+Shift+S)"
@@ -97,7 +159,7 @@ function PadContent({
             onClick={() => setIsSettingsOpen(true)}
             className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
           >
-            ⚙️ {t("settings.title")}
+            ⚙️
           </button>
 
           <Link
@@ -119,7 +181,11 @@ function PadContent({
       </div>
 
       {/* Living Paper Canvas */}
-      <div className="flex-1 flex flex-col min-h-[620px] bg-[var(--theme-paper)] border-2 border-[var(--theme-border)] rounded-xl shadow-[0_6px_0_var(--theme-shadow)] overflow-hidden">
+      <div
+        className={`flex-1 flex flex-col min-h-[620px] bg-[var(--theme-paper)] border-2 border-[var(--theme-border)] rounded-xl shadow-[0_6px_0_var(--theme-shadow)] overflow-hidden ${
+          focusMode ? "focus-mode-active" : ""
+        }`}
+      >
         {/* Cartoon Folder Tab Strip */}
         <div
           className={`transition-opacity duration-300 ${
@@ -167,6 +233,14 @@ function PadContent({
               onHoseLine={setSpeech}
             />
           </div>
+
+          <button
+            type="button"
+            onClick={() => setIsShortcutsOpen(true)}
+            className="text-[11px] underline opacity-70 hover:opacity-100 ml-2"
+          >
+            Shortcuts (Ctrl+/)
+          </button>
         </div>
 
         {activeNote && (
@@ -203,6 +277,18 @@ function PadContent({
         onClose={() => setIsExportOpen(false)}
         noteTitle={activeNote?.title || "Note"}
         noteContent={activeNote?.content || ""}
+      />
+
+      {/* Search Modal (Ctrl+K) */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+
+      {/* Shortcuts Cheat Sheet Modal (Ctrl+/) */}
+      <ShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
       />
     </main>
   );

@@ -143,3 +143,14 @@
   direction: ltr;
   text-align: left;
 }
+
+/* Focus Mode: Dims inactive paragraphs for ultimate writing immersion */
+.focus-mode-active .prose > * {
+  opacity: 0.22;
+  transition: opacity 0.2s ease;
+}
+
+.focus-mode-active .prose > *:hover,
+.focus-mode-active .prose > *:focus-within {
+  opacity: 1 !important;
+}

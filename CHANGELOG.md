@@ -1,5 +1,16 @@
 # Changelog
 
+## [Phase 7] — 2026-11-22
+
+### Added
+- Instant full-text and title note search modal (`<SearchModal>`) accessible via `Ctrl+K`
+- Visual keyboard shortcuts cheat sheet modal (`<ShortcutsModal>`) accessible via `Ctrl+/`
+- Focus Mode (`Ctrl+.`) that dims inactive paragraphs and highlights the current writing block
+- First-run onboarding tips with Rubber Hose UI tooltips (`<hose-tooltip>`)
+- Immersive writing experience polish: seamless transition between film effects and zero-texture Plain mode
+- Full keyboard navigation across all modals and interactive elements
+- All 8 development phases completed, fully verified, and ready for production launch
+
 ## [Phase 6] — 2026-11-22
 
 ### Added
