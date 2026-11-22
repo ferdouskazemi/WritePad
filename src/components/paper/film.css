@@ -10,6 +10,17 @@
   pointer-events: none;
 }
 
+/* Plain theme: completely remove paper texture and film */
+html[data-theme="plain"] .paper-bg,
+[data-theme="plain"] .paper-bg {
+  background-image: none !important;
+}
+
+html[data-theme="plain"] .film-container,
+[data-theme="plain"] .film-container {
+  display: none !important;
+}
+
 .film-container {
   pointer-events: none;
 }

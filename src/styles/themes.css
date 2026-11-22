@@ -95,6 +95,21 @@ html[data-theme="sepia"],
   --theme-shadow: rgba(37, 29, 22, 0.28);
 }
 
+/* Plain / Clean Theme (Zero paper background texture) */
+html[data-theme="plain"],
+[data-theme="plain"] {
+  --theme-paper: #ffffff;
+  --theme-cream: #f8f9fa;
+  --theme-ink: #1a1a1a;
+  --theme-ink-muted: #57606a;
+  --theme-ink-faint: #d0d7de;
+  --theme-border: #1a1a1a;
+  --theme-patch: #f6f8fa;
+  --theme-patch-ink: #1a1a1a;
+  --theme-film-tint: rgba(0, 0, 0, 0.05);
+  --theme-shadow: rgba(0, 0, 0, 0.15);
+}
+
 html[data-theme="night"],
 [data-theme="night"] {
   --theme-paper: #282521;

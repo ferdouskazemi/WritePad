@@ -1,5 +1,18 @@
 # Changelog
 
+## [Phase 4] — 2026-11-22
+
+### Added
+- Auth.js with Google provider (`/api/auth/[...nextauth]`) and Prisma PostgreSQL adapter
+- Full PostgreSQL schema in `prisma/schema.prisma` with User, Account, Session, Note, TabSession, and Settings models
+- Bi-directional sync engine (`/api/sync`) with Dexie outbox queue
+- Version conflict resolution: automatic conflict copy creation (`<title> (conflict copy)`) to prevent text loss
+- Guest note merge: automatically merges local notes upon first Google sign-in with toast confirmation
+- 30-day soft delete Trash management modal
+- Plain theme (بدون پس‌زمینه): clean, distraction-free white sheet with zero background texture
+- Floating mini selection formatting menu: dense toolbar removed; formatting opens right underneath selected text
+- Immersive typing experience: header, tabs, and chrome smoothly fade away during typing
+
 ## [Phase 3] — 2026-11-22
 
 ### Added

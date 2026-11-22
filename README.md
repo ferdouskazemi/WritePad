@@ -8,7 +8,7 @@ A web notepad that feels like writing on a living sheet of 1930s cartoon paper.
 - [x] Phase 1: Paper world & controls
 - [x] Phase 2: Editor
 - [x] Phase 3: Tabs
-- [ ] Phase 4: Google sign-in & sync
+- [x] Phase 4: Google sign-in & sync
 - [ ] Phase 5: Languages, themes & settings
 - [ ] Phase 6: Screenshot & export
 - [ ] Phase 7: Immersive polish & launch

@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import type { Editor } from "@tiptap/react";
-import { EditorToolbar } from "./EditorToolbar";
 import { RichEditor } from "./RichEditor";
 import { MarkdownEditor } from "./MarkdownEditor";
 import { SplitEditor } from "./SplitEditor";
+import { FloatingSelectionMenu } from "./FloatingSelectionMenu";
 import { calculateTextStats } from "@/lib/markdown/textStats";
 import { db, type NoteRecord } from "@/lib/db";
+import { syncEngine } from "@/lib/sync/syncEngine";
 
 interface EditorViewProps {
   noteId?: string;
@@ -20,7 +21,7 @@ interface EditorViewProps {
 export function EditorView({
   noteId = "default-note",
   initialTitle = "Untitled Note",
-  initialContent = "# Welcome to Write Pad\n\nWrite equally well in **English** and **دری / پښتو**.\n\n- Mixed lines render cleanly: Write Pad یادداشت\n- Pashto letters check: ټ ډ ړ ږ ښ ګ ڼ ۍ ې\n- Numbers and digits: 123 or ۱۲۳",
+  initialContent = "# Welcome to Write Pad\n\nWrite equally well in **English** and **دری / پښتو**.\n\nSelect any text to format it with the floating cartoon menu!\n\n- Pashto letters check: ټ ډ ړ ږ ښ ګ ڼ ۍ ې\n- Numbers: 123 or ۱۲۳",
   speechLine,
 }: EditorViewProps) {
   const [content, setContent] = useState(initialContent);
@@ -30,7 +31,9 @@ export function EditorView({
   const [persianDigits, setPersianDigits] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
   const [tiptapInstance, setTiptapInstance] = useState<Editor | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const isLoadedRef = useRef(false);
+  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load from Dexie on mount
   useEffect(() => {
@@ -56,11 +59,22 @@ export function EditorView({
     };
   }, [noteId]);
 
+  // Fade chrome during typing
+  const handleTypingActivity = useCallback(() => {
+    setIsTyping(true);
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+    typingTimerRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 1800);
+  }, []);
+
   // Autosave to Dexie on every keystroke
   const saveToDb = useCallback(
     async (newTitle: string, newContent: string) => {
       if (!isLoadedRef.current) return;
       setSaveStatus("saving");
+      handleTypingActivity();
+
       try {
         const now = new Date().toISOString();
         const existing = await db.notes.get(noteId);
@@ -78,12 +92,13 @@ export function EditorView({
           textDirection: directionOverride,
         };
         await db.notes.put(record);
+        await syncEngine.queueChange(record, "update");
         setSaveStatus("saved");
       } catch (e) {
         console.error("Dexie autosave error:", e);
       }
     },
-    [noteId, editorMode, directionOverride]
+    [noteId, editorMode, directionOverride, handleTypingActivity]
   );
 
   const handleContentChange = (newMd: string) => {
@@ -100,48 +115,90 @@ export function EditorView({
   const stats = calculateTextStats(content);
 
   return (
-    <div className="flex flex-col h-full w-full bg-[var(--theme-paper)] text-[var(--theme-ink)] rounded-lg overflow-hidden border-2 border-[var(--theme-border)] shadow-[0_4px_0_var(--theme-shadow)]">
-      {/* Title bar */}
-      <div className="px-4 py-3 bg-[var(--theme-cream)] border-b-2 border-[var(--theme-border)] flex items-center justify-between gap-4">
+    <div
+      onMouseMove={() => setIsTyping(false)}
+      className="flex flex-col flex-1 w-full bg-[var(--theme-paper)] text-[var(--theme-ink)] relative transition-opacity duration-300"
+    >
+      {/* Floating Mini Selection Formatting Menu (opens under selected text) */}
+      <FloatingSelectionMenu editor={tiptapInstance} />
+
+      {/* Floating View & Tools bar (fades away while typing for pure paper feel) */}
+      <div
+        className={`absolute top-3 right-4 z-20 flex items-center gap-2 transition-opacity duration-300 ${
+          isTyping ? "opacity-0 pointer-events-none" : "opacity-90 hover:opacity-100"
+        }`}
+      >
+        {/* Direction Switcher */}
+        <div className="flex items-center gap-1 bg-[var(--theme-patch)] p-1 rounded-md border border-[var(--theme-border)] shadow-sm text-xs">
+          {(["auto", "ltr", "rtl"] as const).map((dir) => (
+            <button
+              key={dir}
+              type="button"
+              onClick={() => {
+                setDirectionOverride(dir);
+                saveToDb(title, content);
+              }}
+              className={`px-1.5 py-0.5 rounded font-semibold capitalize ${
+                directionOverride === dir
+                  ? "bg-[var(--theme-ink)] text-[var(--theme-paper)]"
+                  : "hover:bg-[var(--theme-cream)]"
+              }`}
+            >
+              {dir}
+            </button>
+          ))}
+        </div>
+
+        {/* Persian Digits Switch */}
+        <button
+          type="button"
+          onClick={() => setPersianDigits((v) => !v)}
+          className={`px-2 py-1 text-xs font-bold rounded border ${
+            persianDigits
+              ? "border-[var(--theme-ink)] bg-[var(--theme-ink)] text-[var(--theme-paper)]"
+              : "border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)]"
+          }`}
+          title="Convert Latin digits to Persian digits (۱۲۳) in RTL paragraphs"
+        >
+          {persianDigits ? "۱۲۳" : "123"}
+        </button>
+
+        {/* View Switcher: Rich / Markdown / Split */}
+        <div className="flex items-center gap-0.5 bg-[var(--theme-patch)] p-1 rounded-md border border-[var(--theme-border)] shadow-sm text-xs">
+          {(["rich", "markdown", "split"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => {
+                setEditorMode(mode);
+                saveToDb(title, content);
+              }}
+              className={`px-2 py-0.5 rounded font-bold capitalize transition-all ${
+                editorMode === mode
+                  ? "bg-[var(--theme-ink)] text-[var(--theme-paper)]"
+                  : "hover:bg-[var(--theme-cream)]"
+              }`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Pure Paper Sheet: Title written directly onto paper */}
+      <div className="pt-6 px-6 sm:px-12">
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
-          placeholder="Note title..."
-          className="text-xl font-bold bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-50 text-[var(--theme-ink)] font-serif"
+          placeholder="Title..."
+          className="text-3xl sm:text-4xl font-extrabold bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-30 text-[var(--theme-ink)] font-serif"
         />
-        <div className="flex items-center gap-2 text-xs font-semibold shrink-0">
-          <span
-            className={`px-2 py-0.5 rounded-full border ${
-              saveStatus === "saved"
-                ? "border-green-800 text-green-900 bg-green-100"
-                : "border-amber-800 text-amber-900 bg-amber-100"
-            }`}
-          >
-            {saveStatus === "saved" ? "● Saved locally" : "○ Saving..."}
-          </span>
-        </div>
+        <div className="h-[2px] bg-[var(--theme-border)] opacity-20 mt-2 mb-4" />
       </div>
 
-      {/* Toolbar */}
-      <EditorToolbar
-        editor={tiptapInstance}
-        editorMode={editorMode}
-        onModeChange={(mode) => {
-          setEditorMode(mode);
-          saveToDb(title, content);
-        }}
-        directionOverride={directionOverride}
-        onDirectionChange={(dir) => {
-          setDirectionOverride(dir);
-          saveToDb(title, content);
-        }}
-        persianDigits={persianDigits}
-        onPersianDigitsToggle={setPersianDigits}
-      />
-
-      {/* Active Editor Pane */}
-      <div className="flex-1 overflow-hidden relative">
+      {/* Writing Area: Fill paper */}
+      <div className="flex-1 px-4 sm:px-10 overflow-y-auto">
         {editorMode === "rich" && (
           <RichEditor
             content={content}
@@ -169,18 +226,22 @@ export function EditorView({
         )}
       </div>
 
-      {/* Status Bar */}
-      <footer className="px-4 py-1.5 bg-[var(--theme-cream)] border-t border-[var(--theme-border)] text-xs text-[var(--theme-ink-muted)] flex items-center justify-between gap-4 select-none">
+      {/* Subtle bottom status indicator: Fades while typing */}
+      <footer
+        className={`px-6 sm:px-12 py-2 text-[11px] text-[var(--theme-ink-muted)] flex items-center justify-between border-t border-[var(--theme-ink-faint)] select-none transition-opacity duration-300 ${
+          isTyping ? "opacity-0" : "opacity-75 hover:opacity-100"
+        }`}
+      >
         <div className="flex items-center gap-3">
           <span>{stats.words} words</span>
           <span>•</span>
-          <span>{stats.characters} characters</span>
+          <span>{stats.characters} chars</span>
           <span>•</span>
-          <span>{stats.paragraphs} paragraphs</span>
+          <span>{saveStatus === "saved" ? "● Saved" : "○ Saving..."}</span>
         </div>
 
         {speechLine && (
-          <div className="text-right truncate italic opacity-80 max-w-sm">
+          <div className="truncate italic max-w-sm">
             &ldquo;{speechLine}&rdquo;
           </div>
         )}
