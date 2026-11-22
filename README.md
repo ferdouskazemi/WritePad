@@ -6,7 +6,7 @@ A web notepad that feels like writing on a living sheet of 1930s cartoon paper.
 
 - [x] Phase 0: Repo & skeleton
 - [x] Phase 1: Paper world & controls
-- [ ] Phase 2: Editor
+- [x] Phase 2: Editor
 - [ ] Phase 3: Tabs
 - [ ] Phase 4: Google sign-in & sync
 - [ ] Phase 5: Languages, themes & settings

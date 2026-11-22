@@ -1,5 +1,19 @@
 # Changelog
 
+## [Phase 2] — 2026-11-22
+
+### Added
+- Rich text editor powered by Tiptap (ProseMirror) with full markdown round-trip via `tiptap-markdown`
+- Markdown source editor powered by CodeMirror 6 with ink tones syntax highlighting
+- Split view with scroll synchronization between CodeMirror and rendered Tiptap preview
+- 1930s hand-inked toolbar icons for headings, styles, lists, tasks, quotes, code, links, tables, rule, and undo/redo
+- Automatic and manual text direction (Auto / LTR / RTL) with per-paragraph bidirectional formatting
+- Persian and Pashto typography enhancements:
+  - ZWNJ (U+200C) keybind on Shift+Space and preservation in word count
+  - Optional typed Latin digits to Persian digits conversion (۱۲۳)
+- Dexie (IndexedDB) local-first autosave on every keystroke
+- Live statistics bar (word count, characters, paragraphs)
+
 ## [Phase 1] — 2026-11-22
 
 ### Added
