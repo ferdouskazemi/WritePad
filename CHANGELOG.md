@@ -1,5 +1,15 @@
 # Changelog
 
+## [Phase 6] — 2026-11-22
+
+### Added
+- High-DPI (2×) PNG screenshot export preserving paper textures, ink colors, and Persian/Pashto font shaping
+- Scope selection (Whole note or Visible view) with optional subtle "Write Pad" watermark
+- Direct copy to clipboard (`ClipboardItem`) and native mobile sharing (`navigator.share`)
+- Direct download as `.md` (Markdown) and `.txt` (Plain text)
+- Global keyboard shortcut (Ctrl+Shift+S) to launch export dialog
+- Thermometer progress indicator (`<hose-progress>`) for long renders and toaster confirmation (`<hose-toast>`)
+
 ## [Phase 5] — 2026-11-22
 
 ### Added

@@ -8,6 +8,7 @@ import { TabStrip } from "@/components/tabs/TabStrip";
 import { EditorView } from "@/components/editor/EditorView";
 import { SyncBar } from "@/components/sync/SyncBar";
 import { SettingsModal } from "@/components/settings/SettingsModal";
+import { ExportModal } from "@/components/export/ExportModal";
 import { I18nProvider, useI18n } from "@/lib/i18n/I18nContext";
 import { HoseToggle, HoseRating } from "@/components/hose";
 
@@ -30,6 +31,19 @@ function PadContent({
   const { t } = useI18n();
   const [isTyping, setIsTyping] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+
+  // Global shortcut: Ctrl+Shift+S for Screenshot/Export
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        setIsExportOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <main
@@ -51,12 +65,12 @@ function PadContent({
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Quick theme selector */}
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value)}
-            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)] font-bold cursor-pointer outline-none shadow-sm"
+            className="text-xs px-2 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)] font-bold cursor-pointer outline-none shadow-sm"
           >
             <option value="cream">📜 {t("themes.cream")}</option>
             <option value="plain">⚪ {t("themes.plain")}</option>
@@ -65,6 +79,16 @@ function PadContent({
             <option value="sepia">🎞 {t("themes.sepia")}</option>
             <option value="night">🌙 {t("themes.night")}</option>
           </select>
+
+          {/* Screenshot / Export Button */}
+          <button
+            type="button"
+            title="Export or Screenshot (Ctrl+Shift+S)"
+            onClick={() => setIsExportOpen(true)}
+            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-cream)] font-bold hover:bg-[var(--theme-paper)] shadow-sm flex items-center gap-1"
+          >
+            📷 Export
+          </button>
 
           {/* Settings button */}
           <button
@@ -78,7 +102,7 @@ function PadContent({
 
           <Link
             href="/lab"
-            className="text-xs px-3 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-patch)] text-[var(--theme-patch-ink)] font-bold hover:opacity-90 shadow-sm"
+            className="text-xs px-2.5 py-1 rounded-md border-2 border-[var(--theme-border)] bg-[var(--theme-patch)] text-[var(--theme-patch-ink)] font-bold hover:opacity-90 shadow-sm"
           >
             Lab ↗
           </Link>
@@ -163,7 +187,7 @@ function PadContent({
         )}
       </footer>
 
-      {/* Settings Modal (using Rubber Hose tabs, sliders, radios, checkboxes, toggles) */}
+      {/* Settings Modal */}
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
@@ -171,6 +195,14 @@ function PadContent({
         onThemeChange={setTheme}
         filmEnabled={filmEnabled}
         onFilmToggle={setFilmEnabled}
+      />
+
+      {/* Export / Screenshot Modal */}
+      <ExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        noteTitle={activeNote?.title || "Note"}
+        noteContent={activeNote?.content || ""}
       />
     </main>
   );
