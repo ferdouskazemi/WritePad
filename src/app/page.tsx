@@ -296,7 +296,7 @@ function PadContent({
 
 export default function Home() {
   const [theme, setTheme] = useState("cream");
-  const [filmEnabled, setFilmEnabled] = useState(true);
+  const [filmEnabled, setFilmEnabled] = useState(false);
   const [speech, setSpeech] = useState<string>("Ready to write!");
 
   useEffect(() => {

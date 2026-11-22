@@ -20,8 +20,8 @@ interface EditorViewProps {
 
 export function EditorView({
   noteId = "default-note",
-  initialTitle = "Untitled Note",
-  initialContent = "# Welcome to Write Pad\n\nWrite equally well in **English** and **دری / پښتو**.\n\nSelect any text to format it with the floating cartoon menu!\n\n- Pashto letters check: ټ ډ ړ ږ ښ ګ ڼ ۍ ې\n- Numbers: 123 or ۱۲۳",
+  initialTitle = "",
+  initialContent = "",
   speechLine,
 }: EditorViewProps) {
   const [content, setContent] = useState(initialContent);

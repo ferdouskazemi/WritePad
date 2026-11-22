@@ -65,17 +65,16 @@ export function TabsProvider({ children }: { children: React.ReactNode }) {
           initialActiveId = session.activeId || (initialTabs[0]?.id ?? null);
         }
 
-        // If no tabs exist, create initial default note
+        // If no tabs exist, create initial default note (completely blank)
         if (initialTabs.length === 0) {
           const defaultId = crypto.randomUUID();
           const now = new Date().toISOString();
           const defaultNote: NoteRecord = {
             id: defaultId,
-            title: "Welcome Note",
-            content:
-              "# Welcome to Write Pad\n\nA web notepad that feels like writing on a living sheet of 1930s cartoon paper.\n\n### Features\n- **Tabs**: Open many notes at once, drag to reorder, pin, or reopen closed tabs.\n- **Bilingual**: English, دری (Dari), and پښتو (Pashto) supported natively.\n- **Living controls**: Every Rubber Hose UI cartoon control is here.\n\nTry writing here...",
-            rating: 4,
-            pinned: true,
+            title: "",
+            content: "",
+            rating: 0,
+            pinned: false,
             version: 1,
             createdAt: now,
             updatedAt: now,
@@ -87,13 +86,25 @@ export function TabsProvider({ children }: { children: React.ReactNode }) {
           initialTabs = [
             {
               id: defaultId,
-              title: defaultNote.title,
-              rating: defaultNote.rating,
-              pinned: true,
+              title: "",
+              rating: 0,
+              pinned: false,
               isDirty: false,
             },
           ];
           initialActiveId = defaultId;
+        } else if (
+          initialTabs.length === 1 &&
+          initialTabs[0].title === "Welcome Note"
+        ) {
+          // If previous session left the initial welcome note template, clear it to start blank
+          const existingNote = await db.notes.get(initialTabs[0].id);
+          if (existingNote && existingNote.content.includes("Welcome to Write Pad")) {
+            existingNote.title = "";
+            existingNote.content = "";
+            await db.notes.put(existingNote);
+            initialTabs[0].title = "";
+          }
         }
 
         if (isMounted) {
@@ -147,7 +158,7 @@ export function TabsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const createTab = useCallback(
-    async (title: string = "Untitled Note", content: string = "") => {
+    async (title: string = "", content: string = "") => {
       const newId = crypto.randomUUID();
       const now = new Date().toISOString();
       const newNote: NoteRecord = {

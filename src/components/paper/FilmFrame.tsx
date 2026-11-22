@@ -10,7 +10,7 @@ interface FilmFrameProps {
 }
 
 export function FilmFrame({
-  enabled = true,
+  enabled = false,
   onWobbleChange,
   children,
 }: FilmFrameProps) {
@@ -191,12 +191,14 @@ export function FilmFrame({
   return (
     <>
       <div className="paper-bg" aria-hidden="true" />
-      <div ref={containerRef} className="film-container" aria-hidden="true">
-        <div ref={grainRef} className="film-grain" />
-        <canvas ref={dustRef} className="film-dust" />
-        <div className="film-vignette" />
-        <div ref={flickRef} className="film-flicker" />
-      </div>
+      {enabled && (
+        <div ref={containerRef} className="film-container" aria-hidden="true">
+          <div ref={grainRef} className="film-grain" />
+          <canvas ref={dustRef} className="film-dust" />
+          <div className="film-vignette" />
+          <div ref={flickRef} className="film-flicker" />
+        </div>
+      )}
       {children}
     </>
   );

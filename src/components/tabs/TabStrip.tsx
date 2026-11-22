@@ -151,23 +151,24 @@ export function TabStrip() {
             </div>
           );
         })}
+
+        {/* Plus button right next to the tab for easy tab addition */}
+        <button
+          type="button"
+          title="New tab (Ctrl+T)"
+          onClick={() => createTab()}
+          className="tab-add-inline-btn"
+          aria-label="New tab"
+        >
+          +
+        </button>
       </div>
 
       {/* Fade edge end */}
       <div className="fade-edge-end" />
 
-      {/* Action buttons on the strip (New Tab +, All Tabs List) */}
+      {/* Action buttons on the strip (All Tabs List) */}
       <div className="flex items-center gap-1 px-2 pb-1 relative z-20">
-        {/* New Tab Button */}
-        <button
-          type="button"
-          title="New note (Ctrl+T)"
-          onClick={() => createTab()}
-          className="w-7 h-7 rounded border border-[var(--theme-border)] bg-[var(--theme-paper)] text-[var(--theme-ink)] font-bold text-base flex items-center justify-center hover:bg-[var(--theme-cream)] shadow-sm active:translate-y-[1px]"
-        >
-          +
-        </button>
-
         {/* All Tabs List Button */}
         <button
           type="button"
