@@ -22,6 +22,7 @@ export function RichEditor({
   onEditorReady,
 }: RichEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: editorExtensions,
     content,
     editorProps: {
