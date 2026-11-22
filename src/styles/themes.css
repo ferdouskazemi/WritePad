@@ -1,0 +1,151 @@
+@import "@fontsource/literata/400.css";
+@import "@fontsource/literata/600.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/vazirmatn/300.css";
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/600.css";
+@import "@fontsource/noto-naskh-arabic/400.css";
+@import "@fontsource/noto-naskh-arabic/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+
+@font-face {
+  font-family: "Patrick Hand";
+  src: url("/rubber-hose-ui/fonts/patrick-hand.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Font Stacks */
+  --font-serif: "Literata", "Noto Naskh Arabic", serif, system-ui;
+  --font-sans: "Inter", "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-hand: "Patrick Hand", "Vazirmatn", cursive, system-ui;
+  --font-mono: "JetBrains Mono", "Vazirmatn", monospace, system-ui;
+
+  /* Default theme: Cream */
+  --theme-paper: #f9f4ea;
+  --theme-cream: #f4ecdc;
+  --theme-ink: #2b1f14;
+  --theme-ink-muted: #5e4632;
+  --theme-ink-faint: #d5c4a7;
+  --theme-border: #2b1f14;
+  --theme-patch: #fbf5eb;
+  --theme-patch-ink: #2b1f14;
+  --theme-film-tint: rgba(52, 30, 12, 0.16);
+  --theme-shadow: rgba(43, 31, 20, 0.22);
+}
+
+/* 5 Paper Themes */
+html[data-theme="cream"],
+[data-theme="cream"] {
+  --theme-paper: #f9f4ea;
+  --theme-cream: #f4ecdc;
+  --theme-ink: #2b1f14;
+  --theme-ink-muted: #5e4632;
+  --theme-ink-faint: #d5c4a7;
+  --theme-border: #2b1f14;
+  --theme-patch: #fbf5eb;
+  --theme-patch-ink: #2b1f14;
+  --theme-film-tint: rgba(52, 30, 12, 0.16);
+  --theme-shadow: rgba(43, 31, 20, 0.22);
+}
+
+html[data-theme="newsprint"],
+[data-theme="newsprint"] {
+  --theme-paper: #eceef0;
+  --theme-cream: #e2e5e8;
+  --theme-ink: #14171a;
+  --theme-ink-muted: #484f56;
+  --theme-ink-faint: #c8cdd2;
+  --theme-border: #14171a;
+  --theme-patch: #f3f5f7;
+  --theme-patch-ink: #14171a;
+  --theme-film-tint: rgba(20, 23, 26, 0.12);
+  --theme-shadow: rgba(20, 23, 26, 0.2);
+}
+
+html[data-theme="kraft"],
+[data-theme="kraft"] {
+  --theme-paper: #d8be97;
+  --theme-cream: #cdb187;
+  --theme-ink: #23160a;
+  --theme-ink-muted: #52371d;
+  --theme-ink-faint: #b4966d;
+  --theme-border: #23160a;
+  --theme-patch: #eed8b6;
+  --theme-patch-ink: #23160a;
+  --theme-film-tint: rgba(35, 22, 10, 0.2);
+  --theme-shadow: rgba(35, 22, 10, 0.28);
+}
+
+html[data-theme="sepia"],
+[data-theme="sepia"] {
+  --theme-paper: #ecd7ac;
+  --theme-cream: #fbe7c0;
+  --theme-ink: #251d16;
+  --theme-ink-muted: #6f5a40;
+  --theme-ink-faint: #cbb489;
+  --theme-border: #251d16;
+  --theme-patch: #fbe7c0;
+  --theme-patch-ink: #251d16;
+  --theme-film-tint: rgba(52, 30, 12, 0.18);
+  --theme-shadow: rgba(37, 29, 22, 0.28);
+}
+
+html[data-theme="night"],
+[data-theme="night"] {
+  --theme-paper: #282521;
+  --theme-cream: #38342f;
+  --theme-ink: #faecd0;
+  --theme-ink-muted: #c9b99a;
+  --theme-ink-faint: #4e483f;
+  --theme-border: #faecd0;
+  /* Light paper patch so brown-ink hose controls stay visible */
+  --theme-patch: #f5e7c8;
+  --theme-patch-ink: #251d16;
+  --theme-film-tint: rgba(250, 236, 208, 0.08);
+  --theme-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Persian / Pashto typography rules */
+[dir="rtl"],
+.rtl-text,
+p[dir="rtl"],
+div[dir="rtl"] {
+  font-size: 1.08em;
+  line-height: 1.9;
+  letter-spacing: normal !important;
+}
+
+[dir="ltr"],
+.ltr-text,
+p[dir="ltr"],
+div[dir="ltr"] {
+  line-height: 1.6;
+}
+
+/* General cartoon aesthetic utilities */
+.ink-border {
+  border: 2.5px solid var(--theme-border);
+}
+
+.ink-card {
+  border: 3px solid var(--theme-border);
+  box-shadow: 0 4px 0 var(--theme-shadow);
+  border-radius: 12px;
+}
+
+.hose-patch {
+  background: var(--theme-patch);
+  color: var(--theme-patch-ink);
+  border: 2px solid var(--theme-border);
+  border-radius: 14px;
+  padding: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 3px 0 var(--theme-shadow);
+}

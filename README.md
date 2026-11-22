@@ -5,7 +5,7 @@ A web notepad that feels like writing on a living sheet of 1930s cartoon paper.
 ## Phase checklist
 
 - [x] Phase 0: Repo & skeleton
-- [ ] Phase 1: Paper world & controls
+- [x] Phase 1: Paper world & controls
 - [ ] Phase 2: Editor
 - [ ] Phase 3: Tabs
 - [ ] Phase 4: Google sign-in & sync
