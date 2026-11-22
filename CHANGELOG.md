@@ -1,5 +1,21 @@
 # Changelog
 
+## [Phase 3] — 2026-11-22
+
+### Added
+- Custom 1930s folder-tab strip where the active tab stands up out of the rail
+- Full keyboard shortcuts:
+  - New tab (Ctrl+T / Alt+T)
+  - Close tab (Ctrl+W / Alt+W)
+  - Next / previous tab (Ctrl+Tab / Ctrl+Shift+Tab)
+  - Reopen recently closed tab from history (Ctrl+Shift+T)
+  - Jump to tab 1 through 9 (Ctrl+1..9)
+- Middle-click to close tabs
+- HTML5 Drag & Drop tab reordering
+- Right-click context menu (Pin/Unpin, Rename, Duplicate, Close, Close Others)
+- Tab session persistence and restoration via Dexie (`db.tabSession`)
+- Smooth handling for 30+ open tabs with horizontal fade scroll and quick search drawer
+
 ## [Phase 2] — 2026-11-22
 
 ### Added

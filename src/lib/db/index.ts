@@ -15,6 +15,14 @@ export interface NoteRecord {
   textDirection?: "auto" | "ltr" | "rtl";
 }
 
+export interface TabSessionRecord {
+  id: string; // "current"
+  openIds: string[];
+  activeId: string;
+  closedHistory: { id: string; title: string; content: string }[];
+  updatedAt: string;
+}
+
 export interface OutboxRecord {
   id: string;
   noteId: string;
@@ -26,12 +34,14 @@ export interface OutboxRecord {
 
 export class WritePadDatabase extends Dexie {
   notes!: Table<NoteRecord, string>;
+  tabSession!: Table<TabSessionRecord, string>;
   outbox!: Table<OutboxRecord, string>;
 
   constructor() {
     super("WritePadDB");
-    this.version(1).stores({
+    this.version(2).stores({
       notes: "id, updatedAt, rating, pinned, deletedAt",
+      tabSession: "id",
       outbox: "id, noteId, timestamp",
     });
   }

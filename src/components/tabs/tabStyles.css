@@ -1,0 +1,131 @@
+/* 1930s Folder-Tab Strip Styling */
+
+.tab-strip-container {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  border-bottom: 2px solid var(--theme-border);
+  background-color: var(--theme-cream);
+  user-select: none;
+}
+
+.tab-strip-scroll {
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  scrollbar-width: none; /* Hide scrollbar for clean cartoon look */
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  gap: 2px;
+  padding-inline-start: 8px;
+  padding-inline-end: 8px;
+  padding-top: 6px;
+}
+
+.tab-strip-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual folder tab */
+.folder-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding-inline-start: 12px;
+  padding-inline-end: 8px;
+  border-top: 2px solid var(--theme-border);
+  border-inline-start: 2px solid var(--theme-border);
+  border-inline-end: 2px solid var(--theme-border);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease-out;
+}
+
+/* Inactive Tab */
+.folder-tab.tab-inactive {
+  background-color: var(--theme-cream);
+  color: var(--theme-ink-muted);
+  border-bottom: 2px solid var(--theme-border);
+  margin-bottom: 0;
+  opacity: 0.85;
+}
+
+.folder-tab.tab-inactive:hover {
+  opacity: 1;
+  background-color: var(--theme-paper);
+}
+
+/* Active Tab: stands up out of the rail */
+.folder-tab.tab-active {
+  background-color: var(--theme-paper);
+  color: var(--theme-ink);
+  border-bottom: 2px solid var(--theme-paper); /* seamless merge with editor sheet */
+  margin-bottom: -2px; /* overlap border */
+  z-index: 10;
+  box-shadow: 0 -2px 0 var(--theme-shadow);
+  transform: translateY(-2px);
+  font-weight: 700;
+}
+
+/* Pinned tab */
+.folder-tab.tab-pinned {
+  padding-inline: 8px;
+}
+
+/* Unsaved dot */
+.tab-unsaved-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #d97706; /* amber */
+  display: inline-block;
+}
+
+/* Tab close button */
+.tab-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.5;
+  transition: all 0.1s ease;
+}
+
+.tab-close-btn:hover {
+  opacity: 1;
+  background-color: var(--theme-ink-faint);
+  color: var(--theme-ink);
+}
+
+/* Fade overflow edges */
+.fade-edge-start {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 24px;
+  background: linear-gradient(to right, var(--theme-cream), transparent);
+  pointer-events: none;
+  z-index: 15;
+}
+
+.fade-edge-end {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 80px; /* leaves room for action buttons */
+  width: 24px;
+  background: linear-gradient(to left, var(--theme-cream), transparent);
+  pointer-events: none;
+  z-index: 15;
+}
