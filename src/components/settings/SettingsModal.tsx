@@ -18,6 +18,8 @@ interface SettingsModalProps {
   onThemeChange: (theme: string) => void;
   filmEnabled: boolean;
   onFilmToggle: (enabled: boolean) => void;
+  paperWidth?: string;
+  onPaperWidthChange?: (width: string) => void;
 }
 
 export function SettingsModal({
@@ -27,6 +29,8 @@ export function SettingsModal({
   onThemeChange,
   filmEnabled,
   onFilmToggle,
+  paperWidth = "1200",
+  onPaperWidthChange,
 }: SettingsModalProps) {
   const { t, locale, setLocale } = useI18n();
   const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -85,6 +89,29 @@ export function SettingsModal({
                     { value: "night", label: t("themes.night") },
                   ]}
                   onChange={(val) => onThemeChange(val)}
+                />
+              </div>
+            </div>
+
+            {/* Paper Width (عرض کاغذ) */}
+            <div className="pt-2 border-t border-[var(--theme-ink-faint)]">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold block">{t("settings.paperWidth")}</label>
+                <span className="text-xs opacity-75 font-mono font-bold">
+                  {paperWidth === "full" ? "100%" : `${paperWidth}px`}
+                </span>
+              </div>
+              <div className="flex justify-center">
+                <HoseRadio
+                  label="Paper Width"
+                  value={paperWidth}
+                  options={[
+                    { value: "1000", label: "1000px" },
+                    { value: "1200", label: "1200px" },
+                    { value: "1400", label: "1400px" },
+                    { value: "full", label: "Full" },
+                  ]}
+                  onChange={(val) => onPaperWidthChange?.(val)}
                 />
               </div>
             </div>

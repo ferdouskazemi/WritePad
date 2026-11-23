@@ -9,7 +9,7 @@
 body {
   background-color: var(--theme-paper);
   color: var(--theme-ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   margin: 0;

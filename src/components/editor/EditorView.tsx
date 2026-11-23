@@ -192,7 +192,7 @@ export function EditorView({
           value={title}
           onChange={handleTitleChange}
           placeholder="Title..."
-          className="text-4xl sm:text-5xl font-black bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-20 text-[var(--theme-ink)] font-serif tracking-tight"
+          className="text-3xl sm:text-4xl font-bold bg-transparent border-none outline-none focus:ring-0 w-full placeholder:opacity-20 text-[var(--theme-ink)] font-sans tracking-normal"
         />
       </div>
 

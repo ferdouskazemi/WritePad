@@ -21,10 +21,14 @@ export function TabStrip() {
   const [searchFilter, setSearchFilter] = useState("");
 
   const activeIndex = Math.max(0, tabs.findIndex((t) => t.id === activeId));
-  const hoseTabItems = tabs.map((t, idx) => ({
-    label: t.title || `Note ${idx + 1}`,
-    value: t.id,
-  }));
+  const hoseTabItems = tabs.map((t, idx) => {
+    let lbl = t.title ? t.title.trim() : `Note ${idx + 1}`;
+    if (lbl.length > 14) lbl = lbl.slice(0, 13) + "…";
+    return {
+      label: lbl,
+      value: t.id,
+    };
+  });
 
   const filteredTabs = tabs.filter((t) =>
     (t.title || "Untitled").toLowerCase().includes(searchFilter.toLowerCase())

@@ -2,6 +2,7 @@
 
 .prose {
   color: var(--theme-ink);
+  font-family: var(--font-sans);
   line-height: 1.7;
 }
 

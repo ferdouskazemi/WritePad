@@ -16,6 +16,8 @@ function PadContent({
   setTheme,
   filmEnabled,
   setFilmEnabled,
+  paperWidth,
+  setPaperWidth,
   speech,
   setSpeech,
 }: {
@@ -23,6 +25,8 @@ function PadContent({
   setTheme: (t: string) => void;
   filmEnabled: boolean;
   setFilmEnabled: (v: boolean) => void;
+  paperWidth: string;
+  setPaperWidth: (w: string) => void;
   speech: string;
   setSpeech: (s: string) => void;
 }) {
@@ -150,6 +154,8 @@ function PadContent({
         onThemeChange={setTheme}
         filmEnabled={filmEnabled}
         onFilmToggle={setFilmEnabled}
+        paperWidth={paperWidth}
+        onPaperWidthChange={setPaperWidth}
       />
 
       {/* Export / Screenshot Modal */}
@@ -178,11 +184,23 @@ function PadContent({
 export default function Home() {
   const [theme, setTheme] = useState("cream");
   const [filmEnabled, setFilmEnabled] = useState(false);
+  const [paperWidth, setPaperWidth] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("writepad_paper_width") || "1200";
+    }
+    return "1200";
+  });
   const [speech, setSpeech] = useState<string>("Ready to write!");
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("writepad_paper_width", paperWidth);
+    const maxWidth = paperWidth === "full" ? "100%" : `${paperWidth}px`;
+    document.documentElement.style.setProperty("--paper-max-width", maxWidth);
+  }, [paperWidth]);
 
   return (
     <div className="burnt-paper-viewport">
@@ -230,31 +248,39 @@ export default function Home() {
         </defs>
       </svg>
 
-      {/* Burnt Paper Sheet floating inside 30px dark frame */}
+      {/* Burnt Paper Sheet floating inside 30px dark frame (max-width around 1200px) */}
       <div className="burnt-paper-sheet">
-        {/* Organic Burnt Edge Scorched Rim Overlay */}
+        {/* 1. Background layer with organic sea-wave burnt edge filter */}
+        <div className="burnt-paper-bg-layer" aria-hidden="true" />
+
+        {/* 2. Organic Burnt Edge Scorched Rim Overlay */}
         <div className="burnt-edge-overlay" aria-hidden="true" />
 
-        {/* Charred Fire / Scorch Flame Accents on Edges */}
-        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden" aria-hidden="true">
+        {/* 3. Charred Fire / Scorch Flame Accents on Edges */}
+        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-[20px]" aria-hidden="true">
           <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-[rgba(26,11,3,0.7)] via-[rgba(65,24,6,0.25)] to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[rgba(26,11,3,0.8)] via-[rgba(65,24,6,0.3)] to-transparent" />
           <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-[rgba(26,11,3,0.65)] via-[rgba(65,24,6,0.2)] to-transparent" />
           <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-[rgba(26,11,3,0.65)] via-[rgba(65,24,6,0.2)] to-transparent" />
         </div>
 
-        <I18nProvider>
-          <TabsProvider>
-            <PadContent
-              theme={theme}
-              setTheme={setTheme}
-              filmEnabled={filmEnabled}
-              setFilmEnabled={setFilmEnabled}
-              speech={speech}
-              setSpeech={setSpeech}
-            />
-          </TabsProvider>
-        </I18nProvider>
+        {/* 4. Crisp, unfiltered Content layer (Tabs, Editor, Title, Dialogs) */}
+        <div className="burnt-paper-content">
+          <I18nProvider>
+            <TabsProvider>
+              <PadContent
+                theme={theme}
+                setTheme={setTheme}
+                filmEnabled={filmEnabled}
+                setFilmEnabled={setFilmEnabled}
+                paperWidth={paperWidth}
+                setPaperWidth={setPaperWidth}
+                speech={speech}
+                setSpeech={setSpeech}
+              />
+            </TabsProvider>
+          </I18nProvider>
+        </div>
       </div>
     </div>
   );

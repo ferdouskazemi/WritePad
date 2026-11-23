@@ -14,12 +14,12 @@
 .hose-tab-wrapper {
   display: inline-flex;
   align-items: center;
-  height: 60px;
+  height: 72px;
   overflow: visible;
 }
 
 .hose-tab-wrapper hose-tabs {
-  transform: scale(0.68);
+  transform: scale(0.78);
   transform-origin: left center;
   margin-right: -10px;
 }
