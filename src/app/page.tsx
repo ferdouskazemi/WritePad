@@ -218,6 +218,14 @@ export default function Home() {
         {/* Organic Burnt Edge Scorched Rim Overlay */}
         <div className="burnt-edge-overlay" aria-hidden="true" />
 
+        {/* Charred Fire / Scorch Flame Accents on Edges */}
+        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden" aria-hidden="true">
+          <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-[rgba(26,11,3,0.7)] via-[rgba(65,24,6,0.25)] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[rgba(26,11,3,0.8)] via-[rgba(65,24,6,0.3)] to-transparent" />
+          <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-[rgba(26,11,3,0.65)] via-[rgba(65,24,6,0.2)] to-transparent" />
+          <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-[rgba(26,11,3,0.65)] via-[rgba(65,24,6,0.2)] to-transparent" />
+        </div>
+
         <I18nProvider>
           <TabsProvider>
             <PadContent
