@@ -47,6 +47,9 @@
     inset 0 0 130px 24px rgba(120, 48, 12, 0.22);
   pointer-events: none;
   z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint;
 }
 
 /* Organic irregular scorched rim via SVG displacement */
@@ -62,6 +65,9 @@
     inset 0 0 28px rgba(28, 9, 2, 0.95),
     inset 0 0 60px rgba(75, 24, 6, 0.6),
     inset 0 0 110px rgba(115, 42, 11, 0.25);
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint;
 }
 
 /* Content layer: completely unaffected by the displacement filter (crisp & sharp) */

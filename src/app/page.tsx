@@ -223,33 +223,16 @@ export default function Home() {
         <defs>
           <filter id="sea-wave-burnt-edge" x="-10%" y="-10%" width="120%" height="120%">
             <feTurbulence
-              type="turbulence"
-              baseFrequency="0.007 0.005"
-              numOctaves="2"
-              seed="5"
-              result="seaWaves"
-            />
-            <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.035 0.035"
-              numOctaves="3"
-              seed="9"
-              result="charNoise"
-            />
-            <feComposite
-              in="seaWaves"
-              in2="charNoise"
-              operator="arithmetic"
-              k1="0"
-              k2="0.82"
-              k3="0.18"
-              k4="0"
+              baseFrequency="0.009 0.007"
+              numOctaves="2"
+              seed="7"
               result="wavyBurntMap"
             />
             <feDisplacementMap
               in="SourceGraphic"
               in2="wavyBurntMap"
-              scale="26"
+              scale="24"
               xChannelSelector="R"
               yChannelSelector="G"
             />

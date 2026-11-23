@@ -161,7 +161,9 @@
     inset 0 0 180px 40px rgba(170, 115, 50, 0.25);
   filter: url(#paper-burn) drop-shadow(0 0 1.5px rgba(255, 120, 30, 0.75))
     drop-shadow(0 0 7px rgba(255, 90, 10, 0.28)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6));
-  animation: paper-ember 5s ease-in-out infinite alternate;
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint;
 }
 .paper--burnt::after { /* سوراخ سوختگی */
   top: 26px; left: 30px; width: 72px; height: 60px;
@@ -169,10 +171,8 @@
   background: radial-gradient(circle, var(--paper-backdrop) 0 34%, #000 40%, rgba(40, 15, 0, 0.9) 46%,
     rgba(120, 60, 15, 0.55) 58%, rgba(160, 95, 35, 0.18) 70%, transparent 74%);
   filter: url(#paper-burn-small);
-}
-@keyframes paper-ember {
-  from { filter: url(#paper-burn) drop-shadow(0 0 1.5px rgba(255, 120, 30, 0.6)) drop-shadow(0 0 6px rgba(255, 90, 10, 0.2)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6)); }
-  to   { filter: url(#paper-burn) drop-shadow(0 0 2px rgba(255, 140, 40, 0.95)) drop-shadow(0 0 10px rgba(255, 90, 10, 0.38)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6)); }
+  transform: translateZ(0);
+  pointer-events: none;
 }
 
 /* =====================================================================
@@ -446,6 +446,4 @@
   transform: rotate(-10deg);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .paper--burnt::before { animation: none; }
-}
+

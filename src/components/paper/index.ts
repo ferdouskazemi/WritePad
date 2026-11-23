@@ -2,6 +2,7 @@ export { Paper, PaperTitle, PaperSubtitle, PaperDivider, PaperPoem, PaperQuote, 
 export type { PaperProps } from './Paper';
 export { PaperFilters } from './PaperFilters';
 export { PaperMotes } from './PaperMotes';
+export { PaperCardSelector } from './PaperCardSelector';
 export { PAPER_VARIANTS } from './variants';
 export type { PaperVariant } from './variants';
 export { FilmFrame } from './FilmFrame';
