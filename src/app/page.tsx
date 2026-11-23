@@ -80,7 +80,7 @@ function PadContent({
   return (
     <main
       onMouseMove={() => setIsTyping(false)}
-      className={`flex-1 flex flex-col w-full bg-transparent transition-all duration-300 relative z-10 ${
+      className={`flex-1 flex flex-col w-full h-full min-h-0 overflow-hidden bg-transparent transition-all duration-300 relative z-10 ${
         focusMode ? "focus-mode-active" : ""
       }`}
     >
@@ -90,7 +90,7 @@ function PadContent({
       </div>
 
       {/* 2. Full-bleed Paper Sheet Area (writing directly on the paper canvas, free of any lines or shapes) */}
-      <div className="flex-1 flex flex-col w-full bg-transparent">
+      <div className="flex-1 flex flex-col w-full bg-transparent min-h-0 overflow-hidden">
         {activeId && activeNote ? (
           <EditorView
             key={activeId}
@@ -106,41 +106,50 @@ function PadContent({
         )}
       </div>
 
-      {/* 3. Subtle floating tools in bottom corner (fades during typing, 0 clutter on the paper) */}
+      {/* 3. Subtle floating vintage tools in bottom corner (fades during typing, 0 clutter on the paper) */}
       <div
-        className={`fixed bottom-10 right-10 z-40 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-patch)] border border-[var(--theme-border)] shadow-md select-none transition-opacity duration-300 ${
-          isTyping ? "opacity-0 pointer-events-none" : "opacity-35 hover:opacity-100"
+        className={`fixed bottom-12 right-14 z-40 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--theme-paper)] border-2 border-[var(--theme-border)] shadow-md select-none transition-opacity duration-300 ${
+          isTyping ? "opacity-0 pointer-events-none" : "opacity-40 hover:opacity-100"
         }`}
       >
         <button
           type="button"
           title="Search Notes (Ctrl+K)"
           onClick={() => setIsSearchOpen(true)}
-          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+          className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[var(--theme-cream)] text-[var(--theme-ink)] cursor-pointer transition-colors"
         >
-          🔍
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
         </button>
         <button
           type="button"
           title="Export / Screenshot (Ctrl+Shift+S)"
           onClick={() => setIsExportOpen(true)}
-          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+          className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[var(--theme-cream)] text-[var(--theme-ink)] cursor-pointer transition-colors"
         >
-          📷
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
         </button>
         <button
           type="button"
           title={t("settings.title")}
           onClick={() => setIsSettingsOpen(true)}
-          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+          className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[var(--theme-cream)] text-[var(--theme-ink)] cursor-pointer transition-colors"
         >
-          ⚙️
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
         </button>
         <button
           type="button"
           title="Shortcuts (Ctrl+/)"
           onClick={() => setIsShortcutsOpen(true)}
-          className="text-xs px-1.5 py-0.5 rounded hover:bg-[var(--theme-cream)] font-bold cursor-pointer"
+          className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[var(--theme-cream)] text-[var(--theme-ink)] text-sm font-bold cursor-pointer transition-colors"
         >
           ?
         </button>

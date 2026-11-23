@@ -3,51 +3,79 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 20px 4px 20px;
+  padding: 24px 32px 0 32px; /* Generous headroom so mascot never collides with top charred edge */
   background: transparent;
   user-select: none;
   position: relative;
   z-index: 25;
-  overflow-x: auto;
+  overflow: visible; /* NO scrollbar on tab strip! */
 }
 
 .hose-tab-wrapper {
   display: inline-flex;
   align-items: center;
-  height: 72px;
+  height: 76px;
   overflow: visible;
+  flex-shrink: 0;
 }
 
 .hose-tab-wrapper hose-tabs {
   transform: scale(0.78);
   transform-origin: left center;
-  margin-right: -10px;
 }
 
-.tab-close-inline-btn {
+/* 1930s Typewriter Keycap Actions Group (+ and Close) */
+.tab-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: 4px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.vintage-tab-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  border: 1.5px solid var(--theme-border);
-  background-color: var(--theme-paper);
-  color: var(--theme-ink-muted);
-  font-weight: 700;
-  font-size: 15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--theme-border, #2b1f14);
+  background-color: var(--theme-paper, #f9f4ea);
+  color: var(--theme-ink, #2b1f14);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 17px;
   line-height: 1;
   cursor: pointer;
-  box-shadow: 0 1px 0 var(--theme-shadow);
-  transition: all 0.15s ease;
-  flex-shrink: 0;
+  box-shadow: 0 2px 0 var(--theme-border, #2b1f14);
+  transition: all 0.12s ease;
   user-select: none;
+  padding: 0;
 }
 
-.tab-close-inline-btn:hover {
-  color: #b91c1c;
+.vintage-tab-btn:hover {
+  background-color: var(--theme-cream, #f4ecdc);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--theme-border, #2b1f14);
+}
+
+.vintage-tab-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--theme-border, #2b1f14);
+}
+
+.vintage-tab-btn.close-btn {
+  color: var(--theme-ink-muted, #5e4632);
+  font-size: 16px;
+}
+
+.vintage-tab-btn.close-btn:hover {
   background-color: #fee2e2;
-  border-color: #ef4444;
+  color: #991b1b;
+  border-color: #991b1b;
+  box-shadow: 0 3px 0 #991b1b;
 }
 
 /* 1930s Folder-Tab Strip Styling */

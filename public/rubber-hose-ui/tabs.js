@@ -25,7 +25,9 @@ class HoseTabs extends fx.Base {
       return { label: lbl, value: o.getAttribute('value') ?? o.textContent.trim(), selected: o.hasAttribute('selected') };
     });
     if (this.opts.length === 0) this.opts = [{ label: 'Untitled', value: 'default' }];
-    W = Math.max(300, this.opts.length * 105);
+    const count = this.opts.length;
+    const tabW = 104;
+    W = Math.max(120, count * tabW + 16);
     return [W, 210];
   }
   render() {
@@ -38,8 +40,8 @@ class HoseTabs extends fx.Base {
     W = this.width || W || 300;
     const btns = this.$$('[role=tab]'), opts = this.opts, n = opts.length, g = this.g, say = (s) => this.say(s);
     const A = { on: art('tab-0'), off: art('tab-1'), puff: art('puff'), sfx: art('sfx-pop') };
-    // the tabs share the rail: each sleeping tab is a little narrower than its share, and the active one a little wider
-    const SP = (W - 12) / n, XS = opts.map((_, i) => 6 + SP * (i + 0.5)), IW = Math.min(110, SP - 6), IH = IW * 269 / 420, AW = IW + 10, AH = AW * 329 / 420;
+    // the tabs sit neatly side-by-side on the rail without empty gaps
+    const SP = (W - 16) / n, XS = opts.map((_, i) => 8 + SP * (i + 0.5)), IW = Math.min(108, SP - 2), IH = IW * 269 / 420, AW = IW + 8, AH = AW * 329 / 420;
     let sel = this.sel = Math.max(0, opts.findIndex((o) => o.selected)), prev = sel, at = -9, face = -1, small = [], big = [];
     const line = (i) => `${opts[i].label}. ${JOKES[opts[i].label.toLowerCase()] || 'He stood up for this.'}`;
     // quiet goes straight to the end, without the pop
@@ -72,7 +74,7 @@ class HoseTabs extends fx.Base {
         write(g, opts[i].label, tx, RAIL - IH * 0.4 - drop * 3, small[i]);
       });
       // the rail, over the feet of the tabs and under the active one's arms
-      g.fillStyle = '#7d9fae'; g.strokeStyle = INK; g.lineWidth = 2.6; g.beginPath(); g.roundRect(6, RAIL, W - 12, 11, 5.5); g.fill(); g.stroke();
+      g.fillStyle = '#c4ad88'; g.strokeStyle = INK; g.lineWidth = 2.6; g.beginPath(); g.roundRect(6, RAIL, W - 12, 11, 5.5); g.fill(); g.stroke();
       const pop = calm ? 0 : ring(k - 3, 12), sy = (0.45 + 0.55 * up) * (1 + 0.2 * pop + 0.025 * bob), sx = 1 - 0.1 * pop, top = RAIL + 2 - AH * sy;
       arm(g, 'fist', x - AW * 0.26 * sx, top + AH * sy * 0.5, Math.max(15, x - AW / 2 - 11), top + 8 - bob * 5 + (1 - up) * 30, -8, { w: 25, turn: 0.25 });
       arm(g, 'fist', x + AW * 0.26 * sx, top + AH * sy * 0.5, Math.min(W - 15, x + AW / 2 + 11), top + 8 - bob * 5 + (1 - up) * 30, 8, { w: 25, turn: -0.25 });

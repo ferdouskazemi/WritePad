@@ -117,7 +117,7 @@ export function EditorView({
   return (
     <div
       onMouseMove={() => setIsTyping(false)}
-      className={`flex flex-col flex-1 w-full bg-transparent text-[var(--theme-ink)] relative transition-opacity duration-300 ${
+      className={`flex flex-col flex-1 w-full h-full min-h-0 overflow-hidden bg-transparent text-[var(--theme-ink)] relative transition-opacity duration-300 ${
         isTyping ? "typing-active" : ""
       }`}
     >
@@ -186,7 +186,7 @@ export function EditorView({
       </div>
 
       {/* Pure Paper Sheet: Title written directly onto paper without any lines or shapes */}
-      <div className="w-full max-w-7xl mx-auto pt-8 px-8 sm:px-16 md:px-24">
+      <div className="w-full max-w-7xl mx-auto pt-6 px-8 sm:px-16 md:px-24 flex-shrink-0">
         <input
           type="text"
           value={title}
@@ -197,7 +197,7 @@ export function EditorView({
       </div>
 
       {/* Writing Area: Clean paper without any distracting lines or doodles */}
-      <div className="flex-1 w-full max-w-7xl mx-auto px-8 sm:px-16 md:px-24 overflow-y-auto pt-4">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-8 sm:px-16 md:px-24 overflow-y-auto min-h-0 pt-4 pb-20">
         {editorMode === "rich" && (
           <RichEditor
             content={content}

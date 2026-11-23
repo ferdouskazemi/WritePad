@@ -34,3 +34,29 @@ hose-toast,
 hose-tooltip {
   display: block;
 }
+
+/* 1930s Vintage Parchment Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(43, 31, 20, 0.05);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-ink-muted, #5e4632);
+  border: 1.5px solid var(--theme-paper, #f9f4ea);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-ink, #2b1f14);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-ink-muted, #5e4632) rgba(43, 31, 20, 0.05);
+}
