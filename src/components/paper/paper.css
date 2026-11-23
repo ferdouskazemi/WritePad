@@ -1,0 +1,451 @@
+/* =====================================================================
+   کاغذها — مجموعهٔ استایل‌های کاغذ برای یادداشت
+   هر کاغذ: <div class="paper paper--burnt"> ... </div>
+   فیلترهای SVG در <PaperFilters /> هستند و باید یک بار در صفحه باشند.
+   ===================================================================== */
+
+/* ——— پایه ——— */
+.paper {
+  --paper-ink: #2a1608;
+  --paper-accent: #7d1d0c;
+  --paper-gold: #a8742a;
+  --paper-line: 2.4rem;            /* فاصلهٔ خط‌ها در دفتر خط‌دار */
+  --paper-pad-y: clamp(44px, 7vw, 96px);
+  --paper-pad-x: clamp(26px, 6vw, 84px);
+  --paper-backdrop: #1b130d;       /* رنگ پشت کاغذ؛ داخل سوراخ‌ها دیده می‌شود */
+
+  /* بافت‌ها */
+  --g-fine: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .32  0 0 0 0 .2  0 0 0 0 .07  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --g-mottle: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.008' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .28  0 0 0 0 .1  .7 0 0 0 -.25'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  --g-flecks-dark: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.38' numOctaves='1' seed='5' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .22  0 0 0 0 .13  0 0 0 0 .05  12 0 0 0 -8.2'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  --g-flecks-light: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.3' numOctaves='1' seed='9' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .96  0 0 0 0 .9  0 0 0 0 .78  0 12 0 0 -8.3'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  --g-gold: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.22' numOctaves='1' seed='14' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .8  0 0 0 0 .62  0 0 0 0 .25  14 0 0 0 -10.2'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  --g-fiber-h: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='h'><feTurbulence type='fractalNoise' baseFrequency='.004 .22' numOctaves='2' seed='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .44  0 0 0 0 .3  8 0 0 0 -5.1'/></filter><rect width='100%' height='100%' filter='url(%23h)'/></svg>");
+  --g-fiber-v: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='v'><feTurbulence type='fractalNoise' baseFrequency='.22 .004' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .44  0 0 0 0 .3  8 0 0 0 -5.2'/></filter><rect width='100%' height='100%' filter='url(%23v)'/></svg>");
+  --g-fiber-soft-h: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='h'><feTurbulence type='fractalNoise' baseFrequency='.005 .35' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .62  0 0 0 0 .55  0 0 0 0 .42  3 0 0 0 -2.15'/></filter><rect width='100%' height='100%' filter='url(%23h)'/></svg>");
+  --g-fiber-soft-v: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='v'><feTurbulence type='fractalNoise' baseFrequency='.35 .005' numOctaves='2' seed='12' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .62  0 0 0 0 .55  0 0 0 0 .42  3 0 0 0 -2.2'/></filter><rect width='100%' height='100%' filter='url(%23v)'/></svg>");
+  --g-stars: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><g fill='%23e6c278'><circle cx='23' cy='41' r='.9' opacity='.7'/><circle cx='88' cy='12' r='.6' opacity='.5'/><circle cx='140' cy='77' r='1.2' opacity='.8'/><circle cx='211' cy='30' r='.7' opacity='.6'/><circle cx='290' cy='95' r='1' opacity='.7'/><circle cx='57' cy='150' r='.6' opacity='.5'/><circle cx='176' cy='168' r='.8' opacity='.6'/><circle cx='251' cy='201' r='1.3' opacity='.85'/><circle cx='31' cy='243' r='1' opacity='.6'/><circle cx='120' cy='262' r='.7' opacity='.55'/><circle cx='199' cy='300' r='.9' opacity='.6'/><circle cx='305' cy='280' r='.6' opacity='.5'/><circle cx='96' cy='205' r='.5' opacity='.4'/><circle cx='268' cy='138' r='.5' opacity='.45'/></g></svg>");
+
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  padding: var(--paper-pad-y) var(--paper-pad-x);
+  color: var(--paper-ink);
+  font-family: var(--font-naskh), "Noto Naskh Arabic", Tahoma, serif;
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 2.1;
+  direction: rtl;
+}
+.paper::before,
+.paper::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.paper::before { inset: 0; z-index: -2; }
+.paper::after  { z-index: -1; }
+
+.paper--tilt { transform: rotate(-0.4deg); }
+.paper--tilt:nth-child(even) { transform: rotate(0.35deg); }
+
+/* ——— نوشته‌ها ——— */
+.paper p { margin: 0 0 1em; }
+.paper-title {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 5vw, 3.2rem);
+  line-height: 2.1;
+  color: var(--paper-accent);
+  text-align: center;
+  margin: 0 0 0.15em;
+}
+.paper-subtitle { text-align: center; opacity: 0.75; font-size: 0.95em; margin: 0 0 1.4em; }
+.paper-accent { color: var(--paper-accent); }
+
+.paper-poem {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  font-size: clamp(1.25rem, 3.4vw, 2.3rem);
+  line-height: 2.5;
+  margin: 0.8em auto;
+  max-width: 920px;
+}
+.paper-beyt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(20px, 5vw, 64px);
+  margin-bottom: 0.3em;
+}
+.paper-mesra { white-space: nowrap; }
+.paper-mesra:first-child { text-align: right; }
+.paper-mesra:last-child  { text-align: left; }
+@container (max-width: 820px) {
+  .paper-beyt { grid-template-columns: 1fr; max-width: 32em; margin-inline: auto; }
+  .paper-mesra { white-space: normal; }
+}
+
+.paper-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  max-width: 420px;
+  margin: 1.4em auto;
+  color: var(--paper-gold);
+  font-family: serif;
+  line-height: 1;
+}
+.paper-divider::before,
+.paper-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.paper-quote {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  text-align: center;
+  font-size: 1.12em;
+  line-height: 2.4;
+  max-width: 36em;
+  margin: 0.8em auto 1.2em;
+  padding: 0.1em 1em;
+  border-inline: 2px solid color-mix(in srgb, var(--paper-accent) 35%, transparent);
+}
+
+.paper-quote-cite {
+  display: block;
+  font-family: var(--font-naskh), "Noto Naskh Arabic", serif;
+  font-style: normal;
+  font-size: 0.62em;
+  line-height: 1.6;
+  color: var(--paper-gold);
+}
+
+.paper-textarea {
+  display: block;
+  width: 100%;
+  min-height: 14em;
+  field-sizing: content;          /* بزرگ شدن خودکار با متن (کروم/سافاری جدید) */
+  resize: none;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  direction: rtl;
+  caret-color: var(--paper-accent);
+}
+.paper-textarea::placeholder { color: currentColor; opacity: 0.45; }
+.paper-textarea::selection,
+.paper ::selection { background: color-mix(in srgb, var(--paper-accent) 25%, transparent); }
+
+/* =====================================================================
+   ۱. سوخته — کاغذ کهنه با لبه‌های سوخته و اخگر
+   ===================================================================== */
+.paper--burnt { --paper-ink: #2a1608; --paper-accent: #7d1d0c; --paper-gold: #a8742a; }
+.paper--burnt::before {
+  background:
+    var(--g-fine),
+    radial-gradient(circle 70px at 82% 14%, transparent 60px, rgba(150, 95, 35, 0.26) 64px, transparent 70px),
+    radial-gradient(ellipse at 18% 78%, rgba(140, 85, 30, 0.18), transparent 25%),
+    radial-gradient(ellipse at 60% 40%, rgba(255, 245, 215, 0.55), transparent 60%),
+    linear-gradient(170deg, #efdcb0 0%, #e8cf98 55%, #d9b97c 100%);
+  box-shadow:
+    inset 0 0 3px 2px #000,
+    inset 0 0 14px 6px rgba(20, 8, 0, 0.95),
+    inset 0 0 38px 14px rgba(80, 38, 8, 0.85),
+    inset 0 0 90px 30px rgba(150, 90, 30, 0.55),
+    inset 0 0 180px 40px rgba(170, 115, 50, 0.25);
+  filter: url(#paper-burn) drop-shadow(0 0 1.5px rgba(255, 120, 30, 0.75))
+    drop-shadow(0 0 7px rgba(255, 90, 10, 0.28)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6));
+  animation: paper-ember 5s ease-in-out infinite alternate;
+}
+.paper--burnt::after { /* سوراخ سوختگی */
+  top: 26px; left: 30px; width: 72px; height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--paper-backdrop) 0 34%, #000 40%, rgba(40, 15, 0, 0.9) 46%,
+    rgba(120, 60, 15, 0.55) 58%, rgba(160, 95, 35, 0.18) 70%, transparent 74%);
+  filter: url(#paper-burn-small);
+}
+@keyframes paper-ember {
+  from { filter: url(#paper-burn) drop-shadow(0 0 1.5px rgba(255, 120, 30, 0.6)) drop-shadow(0 0 6px rgba(255, 90, 10, 0.2)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6)); }
+  to   { filter: url(#paper-burn) drop-shadow(0 0 2px rgba(255, 140, 40, 0.95)) drop-shadow(0 0 10px rgba(255, 90, 10, 0.38)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6)); }
+}
+
+/* =====================================================================
+   ۲. پوستی — پوست آهوی کهن، گرم و لکه‌دار
+   ===================================================================== */
+.paper--parchment { --paper-ink: #3a2210; --paper-accent: #8b2a14; --paper-gold: #9c6a28; }
+.paper--parchment::before {
+  background:
+    var(--g-mottle),
+    var(--g-mottle) 230px 170px / 420px 420px,
+    var(--g-fine),
+    radial-gradient(ellipse 34% 24% at 78% 72%, rgba(140, 90, 30, 0.2), transparent 70%),
+    radial-gradient(ellipse 26% 18% at 20% 26%, rgba(140, 90, 30, 0.16), transparent 70%),
+    radial-gradient(ellipse at 50% 45%, #f4e3b5 0%, #e7cb8c 55%, #c99c50 100%);
+  border-radius: 8px 14px 10px 16px / 16px 8px 14px 10px;
+  box-shadow: inset 0 0 100px rgba(110, 60, 15, 0.6), inset 0 0 18px rgba(80, 42, 8, 0.65);
+  filter: url(#paper-wave) drop-shadow(0 18px 30px rgba(0, 0, 0, 0.38));
+}
+
+/* =====================================================================
+   ۳. پاره — برگی کنده‌شده از دفتر، با چسب کاغذی
+   ===================================================================== */
+.paper--torn {
+  --paper-ink: #2b2b30;
+  --paper-accent: #9a3b2a;
+  --paper-gold: #a08a63;
+  --torn-top: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 16' preserveAspectRatio='none'><path d='M0 16 L0 8 L10 5 L18 9 L27 4 L36 7 L44 3 L55 8 L63 6 L72 10 L80 5 L91 7 L99 2 L110 6 L118 9 L129 4 L137 8 L146 5 L155 10 L163 6 L174 3 L182 8 L191 5 L200 9 L209 4 L218 7 L228 5 L240 8 L240 16 Z'/></svg>");
+  --torn-bottom: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 16' preserveAspectRatio='none'><path d='M0 0 L0 8 L9 11 L19 7 L28 12 L37 9 L46 13 L54 8 L65 10 L73 6 L82 11 L90 9 L101 14 L109 10 L120 7 L128 12 L139 8 L147 11 L156 6 L165 10 L173 13 L184 8 L192 11 L201 7 L210 12 L219 9 L230 11 L240 8 L240 0 Z'/></svg>");
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.3));
+}
+.paper--torn::before {
+  background:
+    var(--g-fine),
+    radial-gradient(ellipse at 50% 40%, #fcf8ee 45%, #f1e6cc 85%, #e6d4ad 100%);
+  -webkit-mask:
+    var(--torn-top) top left / 240px 16px repeat-x,
+    linear-gradient(#000, #000) center / 100% calc(100% - 30px) no-repeat,
+    var(--torn-bottom) bottom left / 240px 16px repeat-x;
+  mask:
+    var(--torn-top) top left / 240px 16px repeat-x,
+    linear-gradient(#000, #000) center / 100% calc(100% - 30px) no-repeat,
+    var(--torn-bottom) bottom left / 240px 16px repeat-x;
+}
+.paper--torn::after { /* چسب کاغذی */
+  top: -12px; left: 50%;
+  width: 136px; height: 34px;
+  transform: translateX(-50%) rotate(-2.5deg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08)),
+    rgba(214, 196, 150, 0.62);
+  clip-path: polygon(0 0, 100% 0, 97% 20%, 100% 40%, 97% 60%, 100% 80%, 97% 100%, 0 100%, 3% 80%, 0 60%, 3% 40%, 0 20%);
+}
+
+/* =====================================================================
+   ۴. دفتر خط‌دار — خط‌های آبی، حاشیهٔ قرمز و سوراخ‌های صحافی
+   ===================================================================== */
+.paper--lined {
+  --paper-ink: #1f2a44;
+  --paper-accent: #c0392b;
+  --paper-gold: #8aa6c8;
+  --paper-backdrop: #e9e4da;
+  line-height: var(--paper-line);
+  padding-right: calc(var(--paper-pad-x) + 34px);
+  background-color: #fdf9ee;
+  background-image: linear-gradient(to bottom,
+      transparent calc(var(--paper-line) - 1px),
+      rgba(90, 140, 200, 0.45) calc(var(--paper-line) - 1px),
+      rgba(90, 140, 200, 0.45) var(--paper-line));
+  background-size: 100% var(--paper-line);
+  background-origin: content-box;
+  background-clip: padding-box;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 16px 30px rgba(0, 0, 0, 0.22);
+}
+.paper--lined::before { /* حاشیهٔ قرمز دوخطی + زردی لبه‌ها */
+  background:
+    linear-gradient(to left,
+      transparent calc(var(--paper-pad-x) + 14px),
+      rgba(214, 80, 80, 0.55) calc(var(--paper-pad-x) + 14px), rgba(214, 80, 80, 0.55) calc(var(--paper-pad-x) + 15.5px),
+      transparent calc(var(--paper-pad-x) + 15.5px), transparent calc(var(--paper-pad-x) + 19px),
+      rgba(214, 80, 80, 0.55) calc(var(--paper-pad-x) + 19px), rgba(214, 80, 80, 0.55) calc(var(--paper-pad-x) + 20.5px),
+      transparent calc(var(--paper-pad-x) + 20.5px)),
+    radial-gradient(ellipse at center, transparent 60%, rgba(190, 160, 100, 0.16) 100%);
+  border-radius: inherit;
+}
+.paper--lined::after { /* سوراخ‌های صحافی (سمت راست) */
+  top: 0; bottom: 0; right: 10px; width: 22px;
+  background: radial-gradient(circle, var(--paper-backdrop) 0 6px, rgba(0, 0, 0, 0.3) 7px, transparent 8.5px)
+    center 30px / 22px 64px repeat-y;
+}
+.paper--lined p,
+.paper--lined .paper-subtitle { margin: 0 0 var(--paper-line); }
+.paper--lined .paper-title { font-size: clamp(1.5rem, 3.6vw, 2.1rem); line-height: calc(var(--paper-line) * 2); margin: 0; }
+.paper--lined .paper-poem { font-size: clamp(1.15rem, 2.6vw, 1.6rem); line-height: calc(var(--paper-line) * 2); margin: 0 auto var(--paper-line); }
+.paper--lined .paper-beyt { margin: 0; }
+.paper--lined .paper-divider { height: var(--paper-line); margin: 0 auto; }
+.paper--lined .paper-quote { line-height: calc(var(--paper-line) * 2); margin: 0 auto var(--paper-line); padding-block: 0; }
+
+/* =====================================================================
+   ۵. تذهیب — جدول‌کشی طلا و لاجورد بر کاغذ زرافشان
+   ===================================================================== */
+.paper--tazhib {
+  --paper-ink: #2b1d0e;
+  --paper-accent: #1f3f7a;
+  --paper-gold: #b8892f;
+  padding: calc(var(--paper-pad-y) + 18px) calc(var(--paper-pad-x) + 18px);
+}
+.paper--tazhib::before {
+  background:
+    var(--g-gold),
+    var(--g-fine),
+    radial-gradient(ellipse at center, #fbf2dc 40%, #f0dfb6 100%);
+  border-radius: 3px;
+  box-shadow: inset 0 0 50px rgba(160, 110, 40, 0.25), 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+.paper--tazhib::after { /* جدول + شمسه‌های گوشه + ترنج بالا و پایین */
+  inset: 16px;
+  box-shadow:
+    inset 0 0 0 2px #b8892f,
+    inset 0 0 0 4px #fbf2dc,
+    inset 0 0 0 7px #1f3f7a,
+    inset 0 0 0 9px #fbf2dc,
+    inset 0 0 0 10px #b8892f;
+  --shamseh: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='%23b8892f'><rect x='9' y='9' width='22' height='22'/><rect x='9' y='9' width='22' height='22' transform='rotate(45 20 20)'/></g><circle cx='20' cy='20' r='7.5' fill='%231f3f7a'/><circle cx='20' cy='20' r='3' fill='%23e9c46a'/></svg>");
+  --toranj: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 26'><path d='M0 13 Q22 0 45 2 Q68 0 90 13 Q68 26 45 24 Q22 26 0 13Z' fill='%23b8892f'/><path d='M15 13 Q30 5 45 6 Q60 5 75 13 Q60 21 45 20 Q30 21 15 13Z' fill='%231f3f7a'/><circle cx='45' cy='13' r='3.2' fill='%23e9c46a'/><circle cx='30' cy='13' r='1.6' fill='%23e9c46a'/><circle cx='60' cy='13' r='1.6' fill='%23e9c46a'/></svg>");
+  background:
+    var(--shamseh) left top / 42px 42px no-repeat,
+    var(--shamseh) right top / 42px 42px no-repeat,
+    var(--shamseh) left bottom / 42px 42px no-repeat,
+    var(--shamseh) right bottom / 42px 42px no-repeat,
+    var(--toranj) center top -8px / 96px 28px no-repeat,
+    var(--toranj) center bottom -8px / 96px 28px no-repeat;
+}
+.paper--tazhib .paper-divider { color: var(--paper-gold); }
+
+/* =====================================================================
+   ۶. نامهٔ تاخورده — جای تا، حلقهٔ قهوه و تمبر
+   ===================================================================== */
+.paper--folded { --paper-ink: #1c2a4a; --paper-accent: #7a2a1a; --paper-gold: #a07850; }
+.paper--folded::before {
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), rgba(0, 0, 0, 0.08) calc(50% - 1px), rgba(255, 255, 255, 0.6) calc(50% + 1px), transparent calc(50% + 2px)),
+    linear-gradient(180deg,
+      transparent calc(33.33% - 1px), rgba(0, 0, 0, 0.08) calc(33.33% - 1px), rgba(255, 255, 255, 0.6) calc(33.33% + 1px), transparent calc(33.33% + 2px),
+      transparent calc(66.66% - 1px), rgba(0, 0, 0, 0.08) calc(66.66% - 1px), rgba(255, 255, 255, 0.6) calc(66.66% + 1px), transparent calc(66.66% + 2px)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035), transparent 50%, rgba(0, 0, 0, 0.02) 50%, transparent),
+    radial-gradient(circle 58px at 16% 84%, transparent 47px, rgba(120, 70, 30, 0.3) 49px, rgba(120, 70, 30, 0.1) 53px, transparent 57px),
+    radial-gradient(circle 54px at 19% 81%, transparent 46px, rgba(120, 70, 30, 0.14) 48px, transparent 53px),
+    var(--g-fine),
+    linear-gradient(160deg, #f8f1df, #efe2c4);
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 24px 40px rgba(0, 0, 0, 0.3);
+}
+.paper--folded::after { /* تمبر */
+  top: 22px; left: 26px; width: 58px; height: 70px;
+  display: grid; place-items: center;
+  content: "❦";
+  font: 28px/1 serif;
+  color: #f6efe0;
+  background: linear-gradient(160deg, #b23a2e, #7d1d16);
+  box-shadow: inset 0 0 0 4px #f6efe0, inset 0 0 0 5px rgba(125, 29, 22, 0.5);
+  padding: 4px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    radial-gradient(circle 3.5px at 4px 4px, transparent 96%, #000) -4px -4px / 8px 8px padding-box;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    radial-gradient(circle 3.5px at 4px 4px, transparent 96%, #000) -4px -4px / 8px 8px padding-box;
+  transform: rotate(6deg);
+  opacity: 0.92;
+}
+
+/* =====================================================================
+   ۷. کاهی — کاغذ کاهی با ذرات و دوخت دور
+   ===================================================================== */
+.paper--kraft { --paper-ink: #3a2412; --paper-accent: #6b1f0e; --paper-gold: #7a5228; }
+.paper--kraft::before {
+  background:
+    var(--g-flecks-dark),
+    var(--g-flecks-light),
+    var(--g-fine),
+    linear-gradient(175deg, #cfae7b, #bf9a63);
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(80, 50, 20, 0.25), inset 0 0 34px rgba(90, 55, 20, 0.28), 0 16px 30px rgba(0, 0, 0, 0.35);
+}
+.paper--kraft::after { /* دوخت */
+  inset: 14px;
+  border: 1.5px dashed rgba(70, 40, 15, 0.45);
+  border-radius: 3px;
+}
+
+/* =====================================================================
+   ۸. لاجورد و طلا — مرکب طلایی بر شب لاجوردی
+   ===================================================================== */
+.paper--lajvard { --paper-ink: #efe2bf; --paper-accent: #e6c278; --paper-gold: #e6c278; }
+.paper--lajvard::before {
+  background:
+    var(--g-stars),
+    radial-gradient(ellipse at 50% 35%, #22336b 0%, #15224a 55%, #0c1530 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.55), 0 24px 44px rgba(0, 0, 0, 0.55);
+}
+.paper--lajvard::after {
+  inset: 14px;
+  border: 1px solid rgba(230, 194, 120, 0.65);
+  outline: 1px solid rgba(230, 194, 120, 0.35);
+  outline-offset: -6px;
+  border-radius: 2px;
+}
+.paper--lajvard .paper-title,
+.paper--lajvard .paper-accent { text-shadow: 0 0 14px rgba(230, 194, 120, 0.35); }
+
+/* =====================================================================
+   ۹. گلبرگ — آبرنگ صورتی و یاسی با لبهٔ نرم
+   ===================================================================== */
+.paper--golbarg { --paper-ink: #4a2340; --paper-accent: #b0476b; --paper-gold: #c98aa0; }
+.paper--golbarg::before {
+  background: var(--g-fine), #fdf6f3;
+  border-radius: 6px;
+  filter: url(#paper-deckle) drop-shadow(0 18px 34px rgba(80, 30, 50, 0.25));
+}
+.paper--golbarg::after { /* لکه‌های آبرنگ */
+  inset: 0;
+  background:
+    radial-gradient(ellipse 340px 260px at 0% 0%, rgba(228, 120, 160, 0.75), rgba(232, 140, 170, 0.32) 45%, transparent 72%),
+    radial-gradient(ellipse 300px 340px at 100% 100%, rgba(160, 125, 215, 0.65), rgba(170, 140, 220, 0.25) 50%, transparent 74%),
+    radial-gradient(ellipse 210px 180px at 94% 4%, rgba(255, 175, 130, 0.55), transparent 70%),
+    radial-gradient(ellipse 190px 160px at 5% 97%, rgba(238, 140, 180, 0.5), transparent 70%),
+    radial-gradient(ellipse 120px 90px at 70% 12%, rgba(228, 120, 160, 0.22), transparent 70%);
+  filter: url(#paper-bloom);
+  mix-blend-mode: multiply;
+  clip-path: inset(4px round 6px);
+}
+
+/* =====================================================================
+   ۱۰. پاپیروس — الیاف درهم و لبه‌های ناهموار
+   ===================================================================== */
+.paper--papyrus { --paper-ink: #3b2410; --paper-accent: #8a3b12; --paper-gold: #9a6b2c; }
+.paper--papyrus::before {
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 80, 30, 0.1) 0 2px, transparent 2px 7px, rgba(255, 240, 200, 0.18) 7px 9px, transparent 9px 13px),
+    repeating-linear-gradient(90deg, rgba(120, 80, 30, 0.07) 0 3px, transparent 3px 11px, rgba(255, 240, 200, 0.12) 11px 13px, transparent 13px 19px),
+    var(--g-fiber-h),
+    var(--g-mottle),
+    var(--g-fine),
+    linear-gradient(180deg, #e7cf98, #dcbd7e);
+  box-shadow: inset 0 0 44px rgba(110, 70, 20, 0.42);
+  filter: url(#paper-wave) drop-shadow(0 18px 32px rgba(0, 0, 0, 0.4));
+}
+
+/* =====================================================================
+   ۱۱. دست‌ساز — کاغذ الیافی سفید با مهر سرخ
+   ===================================================================== */
+.paper--washi { --paper-ink: #2c2c2c; --paper-accent: #b5452f; --paper-gold: #b9a88a; }
+.paper--washi::before {
+  background:
+    var(--g-fiber-soft-h),
+    var(--g-fiber-soft-v),
+    var(--g-fine),
+    radial-gradient(ellipse at center, #fcfaf3 55%, #f3eee0 100%);
+  filter: url(#paper-deckle) drop-shadow(0 14px 26px rgba(0, 0, 0, 0.22));
+}
+.paper--washi::after { /* مهر */
+  bottom: 26px; left: 30px; width: 48px; height: 48px;
+  display: grid; place-items: center;
+  content: "❀";
+  font: 24px/1 serif;
+  color: rgba(181, 69, 47, 0.8);
+  border: 2px solid rgba(181, 69, 47, 0.75);
+  border-radius: 50%;
+  transform: rotate(-10deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper--burnt::before { animation: none; }
+}

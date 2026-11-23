@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { nastaliq, naskh } from "./fonts";
+import { PaperFilters } from "@/components/paper";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,8 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fa" dir="auto" className={`${nastaliq.variable} ${naskh.variable}`}>
       <body className="min-h-screen antialiased">
+        <PaperFilters />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
