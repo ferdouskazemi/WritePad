@@ -41,8 +41,10 @@
   content: "";
   position: absolute;
   pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
-.paper::before { inset: 0; z-index: -2; }
+.paper::before { inset: 0; z-index: -2; contain: paint layout; }
 .paper::after  { z-index: -1; }
 
 .paper--tilt { transform: rotate(-0.4deg); }
@@ -137,41 +139,40 @@
   line-height: inherit;
   direction: rtl;
   caret-color: var(--paper-accent);
+  transform: translateZ(0);
 }
 .paper-textarea::placeholder { color: currentColor; opacity: 0.45; }
 .paper-textarea::selection,
 .paper ::selection { background: color-mix(in srgb, var(--paper-accent) 25%, transparent); }
 
 /* =====================================================================
-   ۱. سوخته — کاغذ کهنه با لبه‌های سوخته و اخگر
+   ۱. سوخته — کاغذ کهنه با لبه‌های سوخته و اخگر (Ultra High-Performance)
    ===================================================================== */
 .paper--burnt { --paper-ink: #2a1608; --paper-accent: #7d1d0c; --paper-gold: #a8742a; }
 .paper--burnt::before {
   background:
-    var(--g-fine),
     radial-gradient(circle 70px at 82% 14%, transparent 60px, rgba(150, 95, 35, 0.26) 64px, transparent 70px),
     radial-gradient(ellipse at 18% 78%, rgba(140, 85, 30, 0.18), transparent 25%),
     radial-gradient(ellipse at 60% 40%, rgba(255, 245, 215, 0.55), transparent 60%),
+    radial-gradient(ellipse at center, transparent 65%, rgba(45, 16, 4, 0.55) 90%, #150601 100%),
     linear-gradient(170deg, #efdcb0 0%, #e8cf98 55%, #d9b97c 100%);
   box-shadow:
-    inset 0 0 3px 2px #000,
-    inset 0 0 14px 6px rgba(20, 8, 0, 0.95),
-    inset 0 0 38px 14px rgba(80, 38, 8, 0.85),
-    inset 0 0 90px 30px rgba(150, 90, 30, 0.55),
-    inset 0 0 180px 40px rgba(170, 115, 50, 0.25);
-  filter: url(#paper-burn) drop-shadow(0 0 1.5px rgba(255, 120, 30, 0.75))
-    drop-shadow(0 0 7px rgba(255, 90, 10, 0.28)) drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6));
-  transform: translateZ(0);
+    0 0 3px rgba(255, 120, 30, 0.65),
+    inset 0 0 10px 4px #0a0401,
+    inset 0 0 36px 12px rgba(65, 24, 6, 0.85);
+  filter: url(#paper-burn) drop-shadow(0 18px 30px rgba(0, 0, 0, 0.5));
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   will-change: transform;
-  contain: paint;
+  contain: paint layout;
 }
-.paper--burnt::after { /* سوراخ سوختگی */
+.paper--burnt::after { /* سوراخ سوختگی ارگانیک بدون فیلتر اضافه */
   top: 26px; left: 30px; width: 72px; height: 60px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--paper-backdrop) 0 34%, #000 40%, rgba(40, 15, 0, 0.9) 46%,
-    rgba(120, 60, 15, 0.55) 58%, rgba(160, 95, 35, 0.18) 70%, transparent 74%);
-  filter: url(#paper-burn-small);
-  transform: translateZ(0);
+  border-radius: 44% 56% 52% 48% / 58% 46% 54% 42%;
+  background: radial-gradient(circle at 45% 45%, var(--paper-backdrop) 0 34%, #000 42%, rgba(40, 15, 0, 0.95) 48%,
+    rgba(140, 65, 15, 0.65) 60%, rgba(180, 110, 40, 0.2) 72%, transparent 76%);
+  box-shadow: 0 0 3px rgba(255, 100, 20, 0.5);
+  transform: translate3d(0, 0, 0);
   pointer-events: none;
 }
 

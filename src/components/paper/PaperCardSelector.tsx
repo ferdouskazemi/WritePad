@@ -13,7 +13,7 @@ interface PaperCardSelectorProps {
  * Miniature preview rendering for each paper variant.
  * Highly detailed CSS art representing each paper's unique character.
  */
-function PaperMiniature({ variant }: { variant: PaperVariant }) {
+const PaperMiniature = React.memo(function PaperMiniature({ variant }: { variant: PaperVariant }) {
   switch (variant) {
     case 'burnt':
       return (
@@ -272,9 +272,9 @@ function PaperMiniature({ variant }: { variant: PaperVariant }) {
     default:
       return <div className="w-full h-full bg-[#f2e6cf] rounded-sm" />;
   }
-}
+});
 
-export function PaperCardSelector({ value, onChange, className = '' }: PaperCardSelectorProps) {
+export const PaperCardSelector = React.memo(function PaperCardSelector({ value, onChange, className = '' }: PaperCardSelectorProps) {
   return (
     <div
       role="radiogroup"
@@ -335,4 +335,4 @@ export function PaperCardSelector({ value, onChange, className = '' }: PaperCard
       </div>
     </div>
   );
-}
+});

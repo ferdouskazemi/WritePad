@@ -86,7 +86,7 @@ export function PaperMotes({ color = '255,214,140', count = 35 }: { color?: stri
     <canvas
       ref={ref}
       aria-hidden="true"
-      style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 3, mixBlendMode: 'screen' }}
+      style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, mixBlendMode: 'screen' }}
     />
   );
 }
