@@ -186,7 +186,7 @@ export default function Home() {
 
   return (
     <div className="burnt-paper-viewport">
-      {/* SVG Filter for Organic Jagged Burnt Edges */}
+      {/* SVG Filter for Organic Sea-Wave Undulating Burnt Edges */}
       <svg
         width="0"
         height="0"
@@ -194,18 +194,35 @@ export default function Home() {
         aria-hidden="true"
       >
         <defs>
-          <filter id="burnt-edge-displacement" x="-10%" y="-10%" width="120%" height="120%">
+          <filter id="sea-wave-burnt-edge" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence
+              type="turbulence"
+              baseFrequency="0.007 0.005"
+              numOctaves="2"
+              seed="5"
+              result="seaWaves"
+            />
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.04"
-              numOctaves="4"
-              seed="7"
-              result="noise"
+              baseFrequency="0.035 0.035"
+              numOctaves="3"
+              seed="9"
+              result="charNoise"
+            />
+            <feComposite
+              in="seaWaves"
+              in2="charNoise"
+              operator="arithmetic"
+              k1="0"
+              k2="0.82"
+              k3="0.18"
+              k4="0"
+              result="wavyBurntMap"
             />
             <feDisplacementMap
               in="SourceGraphic"
-              in2="noise"
-              scale="8"
+              in2="wavyBurntMap"
+              scale="26"
               xChannelSelector="R"
               yChannelSelector="G"
             />

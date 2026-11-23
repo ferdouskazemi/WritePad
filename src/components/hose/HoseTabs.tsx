@@ -82,7 +82,7 @@ export function HoseTabs({
       style={style}
       {...rest}
     >
-      {tabs.slice(0, 4).map((t, idx) => (
+      {tabs.slice(0, 6).map((t, idx) => (
         <option
           key={t.value}
           value={t.value}

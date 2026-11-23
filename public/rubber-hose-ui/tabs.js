@@ -7,7 +7,7 @@
 (() => {
 function component(fx) {
 const { FPS, INK, clamp, ring, beat, esc, art, place, arm, leg, burst, sfx, write, fitSize } = fx;
-const W = 300, RAIL = 160;
+let W = 300; const RAIL = 160;
 const JOKES = { home: 'He lives here, so mind the rug.', profile: 'Mostly his good side.', settings: 'Please don’t touch the big lever.' };
 
 class HoseTabs extends fx.Base {
@@ -19,9 +19,10 @@ class HoseTabs extends fx.Base {
   get value() { return this.ready ? this.opts[this.sel].value : ''; }
   set value(v) { if (!this.ready) return; const i = this.opts.findIndex((o) => o.value === String(v)); if (i >= 0) this.set(i, true); }
   size() {
-    this.opts = [...this.querySelectorAll('option')].slice(0, 4).map((o, i) => ({ label: o.textContent.trim() || `Tab ${i + 1}`, value: o.getAttribute('value') ?? o.textContent.trim(), selected: o.hasAttribute('selected') }));
-    if (this.opts.length < 2) this.opts = [{ label: 'Home', value: 'home' }, { label: 'Profile', value: 'profile' }, { label: 'Settings', value: 'settings' }];
-    return [300, 210];
+    this.opts = [...this.querySelectorAll('option')].slice(0, 6).map((o, i) => ({ label: o.textContent.trim() || `Tab ${i + 1}`, value: o.getAttribute('value') ?? o.textContent.trim(), selected: o.hasAttribute('selected') }));
+    if (this.opts.length === 0) this.opts = [{ label: 'Untitled', value: 'default' }];
+    W = Math.max(260, this.opts.length * 80);
+    return [W, 210];
   }
   render() {
     const sel = Math.max(0, this.opts.findIndex((o) => o.selected));
@@ -30,6 +31,7 @@ class HoseTabs extends fx.Base {
   }
 
   setup() {
+    W = this.width || W || 300;
     const btns = this.$$('[role=tab]'), opts = this.opts, n = opts.length, g = this.g, say = (s) => this.say(s);
     const A = { on: art('tab-0'), off: art('tab-1'), puff: art('puff'), sfx: art('sfx-pop') };
     // the tabs share the rail: each sleeping tab is a little narrower than its share, and the active one a little wider
