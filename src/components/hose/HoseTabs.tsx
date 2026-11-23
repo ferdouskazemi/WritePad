@@ -77,17 +77,14 @@ export function HoseTabs({
     <hose-tabs
       ref={ref}
       label={label}
+      selected={selectedIndex}
       disabled={disabled || !loaded}
       className={`inline-block ${className}`}
       style={style}
       {...rest}
     >
-      {tabs.slice(0, 6).map((t, idx) => (
-        <option
-          key={t.value}
-          value={t.value}
-          selected={selectedIndex === idx ? true : undefined}
-        >
+      {tabs.slice(0, 6).map((t) => (
+        <option key={t.value} value={t.value}>
           {t.label}
         </option>
       ))}

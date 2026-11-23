@@ -75,17 +75,14 @@ export function HoseRadio({
       ref={ref}
       label={label}
       name={name}
+      value={value}
       disabled={disabled || !loaded}
       className={`inline-block ${className}`}
       style={style}
       {...rest}
     >
       {options.map((opt) => (
-        <option
-          key={opt.value}
-          value={opt.value}
-          selected={value === opt.value ? true : undefined}
-        >
+        <option key={opt.value} value={opt.value}>
           {opt.label}
         </option>
       ))}
